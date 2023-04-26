@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView } from 'react-native'
 import React from 'react'
 import ErrorBoundary from './src/screens/ErrorBoundary'
 import NetworkIndicator from './src/components/NetworkIndicator'
@@ -7,12 +7,12 @@ type Props = {}
 
 const App = (props: Props) => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ErrorBoundary>
         <Text>App</Text>
-        <NetworkIndicator />
+          <NetworkIndicator />
       </ErrorBoundary>
-    </View>
+    </SafeAreaView>
   )
 }
 

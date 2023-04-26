@@ -7,12 +7,27 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "clean": "cd android && ./gradlew clean && cd ..",
+    "apk-live": "cd android && ./gradlew app:assembleRelease && cd app && cd build && cd outputs && cd apk && cd release && open .",
+    "xcode": "xed -b ios",
+    "pods": "cd ./ios && pod install",
+    "tcp": "adb reverse tcp:8081 tcp:8081",
+    "build_android": "cd ./android && ./gradlew app:assembleRelease",
+    "apk": "cd ./android/app/build/outputs/apk/release && open . "
   },
   "dependencies": {
     "@react-native-community/netinfo": "^9.3.9",
+    "@react-navigation/bottom-tabs": "^6.5.7",
+    "@react-navigation/drawer": "^6.6.2",
+    "@react-navigation/native": "^6.1.6",
+    "@react-navigation/native-stack": "^6.9.12",
     "react": "18.2.0",
-    "react-native": "0.71.7"
+    "react-native": "0.71.7",
+    "react-native-gesture-handler": "^2.9.0",
+    "react-native-reanimated": "^3.1.0",
+    "react-native-safe-area-context": "^4.5.1",
+    "react-native-screens": "^3.20.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
