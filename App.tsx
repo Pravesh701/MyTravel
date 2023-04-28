@@ -1,18 +1,20 @@
-import { StyleSheet, Text, View, SafeAreaView } from 'react-native'
+import { StyleSheet, View, StatusBar } from 'react-native'
 import React from 'react'
-import ErrorBoundary from './src/screens/ErrorBoundary'
-import NetworkIndicator from './src/components/NetworkIndicator'
+
+//Custom Imports
+import Main from "./src/index";
+import ErrorBoundary from './src/screens/errorBoundary'
 
 type Props = {}
 
 const App = (props: Props) => {
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <ErrorBoundary>
-        <Text>App</Text>
-          <NetworkIndicator />
+        <Main />
+        <StatusBar />
       </ErrorBoundary>
-    </SafeAreaView>
+    </View>
   )
 }
 
