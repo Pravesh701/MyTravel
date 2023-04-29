@@ -1,5 +1,5 @@
 export default {
-    primary: "#0373F3",
+    primary: "#00B0FF",
     modalBg: "rgba(255, 255, 255, 0.9)",
     mediumBlack: "rgba(0, 0, 0, 0.86)",
     lightMediumBlack: "rgba(0, 0, 0, 0.36)",
@@ -11,4 +11,5 @@ export default {
     gray: "#818181",
     darkBlue:"rgb(24,48,117)",
     modalBackground: "rgba(0,0,0,0.5)",
+    lightBlack: "rgba(0, 0, 0, 0.56)",
 };

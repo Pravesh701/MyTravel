@@ -1,10 +1,9 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList, Image } from 'react-native'
 import React, { memo, useCallback, useState, useEffect, useRef, MutableRefObject } from 'react'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, Image, Pressable } from 'react-native'
 
 //Custom Imports
 import color from '../../constants/color';
-import SearchBar from '../../components/SearchBar';
 import fontFamily from '../../constants/fontFamily';
 import FilterIcon from '../../assets/svgs/FilterIcon';
 import { searchResultsSelector } from '../../selectors/travel.selector';
@@ -46,31 +45,30 @@ const Home = (props: Props) => {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Image resizeMode={"contain"} style={styles.logoStyle} source={require("../../assets/images/log.png")} />
-        <Text style={styles.title}>{"Explore"}</Text>
-        <Image resizeMode={"contain"} style={styles.logoStyle} source={{ uri: "https://img.icons8.com/fluency/48/null/lifecycle.png" }} />
+    <SafeAreaView style={styles.safeAreaView}>
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <Image resizeMode={"contain"} style={styles.logoStyle} source={require("../../assets/images/log.png")} />
+          <Text style={styles.title}>{"Explore"}</Text>
+          <Image resizeMode={"contain"} style={styles.logoStyle} source={{ uri: "https://img.icons8.com/fluency/48/null/lifecycle.png" }} />
+        </View>
+        <Text style={styles.description}>{"Where is your next destination?"}</Text>
+        <View style={styles.mainSearch}>
+          <Pressable style={styles.searchContainer} onPress={onPressSearch}>
+            <TouchableOpacity
+              onPress={onPressRightIcon}
+              style={styles.searchIconContainer}
+            >
+              <Image resizeMode={"contain"} style={styles.locationIcon} source={{ uri: "https://img.icons8.com/ios/50/null/marker--v2.png" }} />
+            </TouchableOpacity>
+            <Text style={styles.searchInput}>{"Your Destination"}</Text>
+          </Pressable>
+          <TouchableOpacity style={styles.filterContainer}>
+            <FilterIcon />
+          </TouchableOpacity>
+        </View>
       </View>
-      <Text style={styles.description}>{"Where is your next destination?"}</Text>
-      <View style={styles.mainSearch}>
-        <TouchableOpacity activeOpacity={0.8} style={styles.searchContainer} onPress={onPressSearch}>
-          <SearchBar
-            ref={searchRef}
-            placeholder={"Your Destination"}
-            query={search}
-            handleQueryChange={searchFlight}
-            shouldShowIcon={true}
-            clearSearch={true}
-            onPressRightIcon={onPressRightIcon}
-            disabled={false}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.filterContainer}>
-          <FilterIcon />
-        </TouchableOpacity>
-      </View>
-    </View>
+    </SafeAreaView>
   )
 }
 
@@ -81,6 +79,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: color.white,
     paddingHorizontal: 16
+  },
+  safeAreaView: {
+    flex: 1,
   },
   headerContainer: {
     backgroundColor: color.white,
@@ -100,17 +101,24 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   description: {
-    marginTop: 10,
+    marginTop: 16,
     color: color.darkBlue,
     fontFamily: fontFamily.bold,
     fontSize: 26
   },
   mainSearch: {
     flexDirection: "row",
-    marginTop: 10,
+    marginTop: 16,
   },
   searchContainer: {
+    height: 44,
+    flexDirection: "row",
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.4)",
+    borderRadius: 10,
+    alignItems: "center",
     flex: 1,
+    backgroundColor: "white",
   },
   filterContainer: {
     width: 44,
@@ -120,5 +128,24 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginStart: 23
+  },
+  locationIcon: {
+    width: 24,
+    height: 24
+  },
+  searchIconContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 10,
+    marginLeft: 10,
+    width: 18,
+  },
+  searchInput: {
+    marginLeft: 8,
+    fontSize: 16,
+    lineHeight: 24,
+    color: color.modalBackground,
+    flex: 1,
+    fontFamily: fontFamily.regular
   },
 })

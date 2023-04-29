@@ -1,13 +1,13 @@
 import React, { memo, useState, useRef, MutableRefObject } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, SafeAreaView } from 'react-native'
 
 //Custom Imports
 import color from '../../constants/color';
 import SearchBar from '../../components/SearchBar';
 import BackArrow from '../../assets/svgs/BackArrow';
 import fontFamily from '../../constants/fontFamily';
-import { HomeScreenNavigationProp, ExploreJourneyRouteProp } from '../../navigation/types';
 import CalendarView from '../../components/CalendarView';
+import { HomeScreenNavigationProp, ExploreJourneyRouteProp } from '../../navigation/types';
 
 type Props = {
     route: ExploreJourneyRouteProp;
@@ -38,57 +38,71 @@ const ExploreJourney = (props: Props) => {
         setDestination("");
     }
 
+    const onSearch = () => {
+
+    }
+
     return (
-        <ScrollView
-            style={styles.container}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.contentContainer}>
-            <View style={styles.headerContainer}>
-                <TouchableOpacity onPress={onBackPress} style={styles.backButtonContainer}>
-                    <BackArrow fill={color.mediumBlack} />
+        <SafeAreaView style={styles.mainContainer}>
+            <ScrollView
+                style={styles.container}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={styles.contentContainer}>
+                <View style={styles.headerContainer}>
+                    <TouchableOpacity onPress={onBackPress} style={styles.backButtonContainer}>
+                        <BackArrow fill={color.mediumBlack} />
+                    </TouchableOpacity>
+                    <Text style={styles.title}>{"Explore"}</Text>
+                </View>
+                <Text style={styles.searchFlight}>{"Search flights"}</Text>
+                <SearchBar
+                    ref={sourceRef}
+                    placeholder={"Select Destination City or Airport"}
+                    query={source}
+                    handleQueryChange={handleSourceChange}
+                    shouldShowIcon={true}
+                    clearSearch={true}
+                    onPressRightIcon={onPressSourceRightIcon}
+                    customStyles={styles.sourceInputStyle}
+                />
+                <SearchBar
+                    ref={destinationRef}
+                    placeholder={"Select Arrival City or Airport"}
+                    query={destination}
+                    handleQueryChange={handleDestinationChange}
+                    shouldShowIcon={true}
+                    clearSearch={true}
+                    onPressRightIcon={onPressDestinationRightIcon}
+                    customStyles={styles.destinationInputStyle}
+                />
+                <Text style={styles.tripDate}>{"Trip Date"}</Text>
+                <View style={styles.tripDateContainer}>
+                    <CalendarView
+                        placeHolder={departureTime}
+                        onDayPress={({ dateString }) => setDepartureTime(dateString)}
+                    />
+                    <CalendarView
+                        placeHolder={arrival}
+                        onDayPress={({ dateString }) => setArrival(dateString)}
+                    />
+                </View>
+                <TouchableOpacity style = {styles.searchButton} onPress={onSearch}>
+                    <Text style = {styles.searchText}>
+                        {"Search Flight"}
+                    </Text>
                 </TouchableOpacity>
-                <Text style={styles.title}>{"Explore"}</Text>
-            </View>
-            <Text style={styles.searchFlight}>{"Search flights"}</Text>
-            <SearchBar
-                ref={sourceRef}
-                placeholder={"Select Destination City or Airport"}
-                query={source}
-                handleQueryChange={handleSourceChange}
-                shouldShowIcon={true}
-                clearSearch={true}
-                onPressRightIcon={onPressSourceRightIcon}
-                customStyles={styles.sourceInputStyle}
-            />
-            <SearchBar
-                ref={destinationRef}
-                placeholder={"Select Arrival City or Airport"}
-                query={destination}
-                handleQueryChange={handleDestinationChange}
-                shouldShowIcon={true}
-                clearSearch={true}
-                onPressRightIcon={onPressDestinationRightIcon}
-                customStyles={styles.destinationInputStyle}
-            />
-            <Text style={styles.tripDate}>{"Trip Date"}</Text>
-            <View style={styles.tripDateContainer}>
-                <CalendarView
-                    placeHolder={departureTime}
-                    onDayPress={({ dateString }) => setDepartureTime(dateString)}
-                />
-                <CalendarView
-                    placeHolder={arrival}
-                    onDayPress={({ dateString }) => setArrival(dateString)}
-                />
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 
 export default memo(ExploreJourney);
 
 const styles = StyleSheet.create({
+    mainContainer: {
+        flex: 1
+    },
     container: {
         flex: 1,
         backgroundColor: color.white,
@@ -142,5 +156,21 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "space-between",
         marginTop: 10
+    },
+    searchButton:{
+        height: 44,
+        borderRadius: 20,
+        backgroundColor: color.primary,
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+       position: "absolute",
+       bottom: 20,
+       alignSelf: "center",
+    },
+    searchText:{
+        color: color.white,
+        fontFamily: fontFamily.bold,
+        fontSize: 16,
     }
 })

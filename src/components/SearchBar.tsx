@@ -5,7 +5,6 @@ import { TouchableOpacity, View, TextInput, StyleSheet, Image } from "react-nati
 import color from "../constants/color";
 import fontFamily from "../constants/fontFamily";
 import CrossIcon from "../assets/svgs/CrossIcon";
-import SearchIcon from "../assets/svgs/SearchIcon";
 
 interface Props {
     customStyles?: Object;
@@ -47,7 +46,6 @@ const SearchBar = forwardRef<Ref, Props>(({
                         onPress={onPressRightIcon}
                         style={styles.searchIconContainer}
                     >
-                        {/* <SearchIcon /> */}
                         <Image resizeMode={"contain"} style={styles.locationIcon} source={{ uri: "https://img.icons8.com/ios/50/null/marker--v2.png" }} />
                     </TouchableOpacity>
                 )}

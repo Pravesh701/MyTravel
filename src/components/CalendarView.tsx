@@ -6,6 +6,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Modal, Image } from 'react-na
 //Custom Imports
 import color from '../constants/color';
 import CrossIcon from '../assets/svgs/CrossIcon';
+import fontFamily from '../constants/fontFamily';
 
 type Props = {
     placeHolder: string;
@@ -31,7 +32,7 @@ const CalendarView = ({ placeHolder = "", onDayPress = () => { } }: Props) => {
     return (
         <React.Fragment>
             <TouchableOpacity activeOpacity={0.6} style={styles.buttonContainer} onPress={openCalendar}>
-                <Text>{placeHolder}</Text>
+                <Text style={styles.buttonText}>{placeHolder}</Text>
                 <Image resizeMode={"contain"} style={styles.calendarIcon} source={{ uri: "https://img.icons8.com/material-outlined/24/null/calendar--v1.png" }} />
             </TouchableOpacity>
             <Modal
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
             width: 0,
             height: 1,
         },
-        shadowOpacity: 0.001,
+        shadowOpacity: 0.2,
         shadowRadius: 4.65,
         elevation: 4,
         shadowColor: "rgba(0,0,0,0.7)",
@@ -93,12 +94,15 @@ const styles = StyleSheet.create({
         width: "45%"
     },
     buttonText: {
-
+        color: color.lightBlack,
+        fontFamily: fontFamily.medium,
+        fontSize: 14,
     },
     calendarIcon: {
         width: 20,
         height: 20,
-        marginStart: 8
+        marginStart: 8,
+        tintColor: color.lightBlack,
     },
     closeCalendar: {
         alignSelf: "flex-end",
