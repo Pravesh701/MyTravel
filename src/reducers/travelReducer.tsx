@@ -1,8 +1,13 @@
 import {
     TRAVEL_TYPES,
 } from "./actionTypes";
+import { travelSearchItemsType } from "../types/travelSearchDataTypes";
 
-const initState = {
+type travelData = {
+    searchResults: Array<travelSearchItemsType>
+}
+
+const initState: travelData = {
     searchResults: [],
 };
 

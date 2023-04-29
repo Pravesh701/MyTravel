@@ -5,10 +5,14 @@ import { flightSearch } from "../services/api";
 import { TRAVEL_TYPES } from "../reducers/actionTypes";
 import { updateSearchData } from "../actions/travel.action";
 
-function* travelRequest(action: any) {
-    console.log('action', action);
+type ACTION_TYPES = {
+    payload?: string;
+    type: string
+}
+
+function* travelRequest({ payload = "" }: ACTION_TYPES) {
     try {
-        const { data } = yield call(flightSearch, action?.payload || "");
+        const { data } = yield call(flightSearch, payload);
         const { result } = data?.data || {};
         if (result && data?.message === "Success") {
             yield put(updateSearchData(result));

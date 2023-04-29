@@ -1,3 +1,6 @@
-const root = (state: any) => state.travel;
+//Custom Imports
+import { RootState } from "../reducers";
 
-export const searchResultsSelector = (state: any) => root(state)?.searchResults;
+const root = (state: RootState) => state.travel;
+
+export const searchResultsSelector = (state: RootState) => root(state)?.searchResults;

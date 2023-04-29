@@ -7,8 +7,8 @@ import color from '../../constants/color';
 import SearchBar from '../../components/SearchBar';
 import fontFamily from '../../constants/fontFamily';
 import FilterIcon from '../../assets/svgs/FilterIcon';
-import { getSearchApi } from "../../actions/travel.action";
 import { searchResultsSelector } from '../../selectors/travel.selector';
+import { getSearchApi, updateSearchData } from "../../actions/travel.action";
 import { HomeScreenNavigationProp, HomeScreenRouteProp } from '../../navigation/types';
 
 type Props = {
@@ -22,11 +22,14 @@ const Home = (props: Props) => {
   const searchRef = useRef() as MutableRefObject<TextInput>;
   const searchResults = useSelector(searchResultsSelector);
 
-  console.log("searchResults", searchResults);
 
   const searchFlight = useCallback((searchKey = "") => {
     setSearch(searchKey)
-    searchKey.length > 2 && getSearchData(searchKey)
+    if (searchKey.length > 2) {
+      getSearchData(searchKey);
+    } else if (Array.isArray(searchResults) && searchResults.length !== 0) {
+      dispatch(updateSearchData([]))
+    }
   }, [])
 
   const onPressRightIcon = useCallback(() => {
