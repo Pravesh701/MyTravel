@@ -9,4 +9,5 @@ export default {
     lightBlue: "#E4ECF5",
     inActive: "#BCBCBC",
     gray: "#818181",
+    darkBlue:"rgb(24,48,117)",
 };

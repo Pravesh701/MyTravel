@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList } from 'react-native'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList, Image } from 'react-native'
 import React, { memo, useCallback, useState, useEffect, useRef, MutableRefObject } from 'react'
 
 //Custom Imports
@@ -41,21 +41,31 @@ const Home = (props: Props) => {
     dispatch(getSearchApi(searchTerm));
   }
 
+  const onPressSearch = () => {
+    props?.navigation && props.navigation.navigate("ExploreJourney");
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{"Find your next trip"}</Text>
-      <Text style={styles.description}>{"Nordic scenery"}</Text>
+      <View style={styles.headerContainer}>
+        <Image resizeMode={"contain"} style={styles.logoStyle} source={require("../../assets/images/log.png")} />
+        <Text style={styles.title}>{"Explore"}</Text>
+        <Image resizeMode={"contain"} style={styles.logoStyle} source={{ uri: "https://img.icons8.com/fluency/48/null/lifecycle.png" }} />
+      </View>
+      <Text style={styles.description}>{"Where is your next destination?"}</Text>
       <View style={styles.mainSearch}>
-        <SearchBar
-          ref={searchRef}
-          placeholder={"Search..."}
-          query={search}
-          handleQueryChange={searchFlight}
-          shouldShowIcon={true}
-          clearSearch={true}
-          onPressRightIcon={onPressRightIcon}
-          customStyles={styles.searchContainer}
-        />
+        <TouchableOpacity activeOpacity={0.8} style={styles.searchContainer} onPress={onPressSearch}>
+          <SearchBar
+            ref={searchRef}
+            placeholder={"Your Destination"}
+            query={search}
+            handleQueryChange={searchFlight}
+            shouldShowIcon={true}
+            clearSearch={true}
+            onPressRightIcon={onPressRightIcon}
+            disabled={false}
+          />
+        </TouchableOpacity>
         <TouchableOpacity style={styles.filterContainer}>
           <FilterIcon />
         </TouchableOpacity>
@@ -72,21 +82,32 @@ const styles = StyleSheet.create({
     backgroundColor: color.white,
     paddingHorizontal: 16
   },
+  headerContainer: {
+    backgroundColor: color.white,
+    marginTop: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between"
+  },
+  logoStyle: {
+    height: 44,
+    width: 44,
+    borderRadius: 22,
+  },
   title: {
-    marginTop: 81,
-    color: color.gray,
+    color: color.mediumBlack,
     fontFamily: fontFamily.medium,
     fontSize: 16
   },
   description: {
-    marginTop: 2,
-    color: color.mediumBlack,
-    fontFamily: fontFamily.medium,
+    marginTop: 10,
+    color: color.darkBlue,
+    fontFamily: fontFamily.bold,
     fontSize: 26
   },
   mainSearch: {
     flexDirection: "row",
-    marginTop: 26,
+    marginTop: 10,
   },
   searchContainer: {
     flex: 1,

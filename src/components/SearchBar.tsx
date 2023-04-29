@@ -16,6 +16,7 @@ interface Props {
     autoFocus?: boolean;
     onPressRightIcon?: () => void;
     clearSearch?: boolean;
+    disabled?: boolean
 }
 type Ref = TextInput;
 
@@ -28,6 +29,7 @@ const SearchBar = forwardRef<Ref, Props>(({
     autoFocus = false,
     onPressRightIcon = () => { },
     clearSearch = false,
+    disabled = false,
 }, ref) => {
     return (
         <View
@@ -57,6 +59,7 @@ const SearchBar = forwardRef<Ref, Props>(({
                     autoFocus={autoFocus}
                     clearButtonMode="always"
                     ref={ref}
+                    editable = {disabled}
                 />
 
                 {shouldShowIcon && query.length > 0 && clearSearch && (

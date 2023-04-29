@@ -20,11 +20,13 @@ export type destinationType = {
     arrTime: string;
 }
 
+export type sourceType = {
+    airport: airportType;
+    depTime: string;
+}
+
 export type displayDataType = {
-    source: {
-        airport: airportType;
-        depTime: string;
-    };
+    source: sourceType;
     airlines: Array<airlinesItems>;
     stopInfo: string;
     destination: destinationType;
