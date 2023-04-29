@@ -7,4 +7,6 @@ export default {
     white: "#ffffff",
     errorRed: "#C41A16",
     lightBlue: "#E4ECF5",
+    inActive: "#BCBCBC",
+    gray: "#818181",
 };

@@ -1,3 +1,3 @@
 const root = (state: any) => state.travel;
 
-export const travelDataSelector = (state: any) => root(state)?.travelData;
+export const searchResultsSelector = (state: any) => root(state)?.searchResults;

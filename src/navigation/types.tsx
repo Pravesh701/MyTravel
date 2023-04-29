@@ -21,7 +21,7 @@ export type WalletScreenRouteProp = RouteProp<
 >;
 
 export type BottomTabNavigatorParamList = {
-    Home: HomeStackNavigatorParamList;
+    HomeStack: HomeStackNavigatorParamList;
     Wallet: WalletStackNavigatorParamList;
 };
 
