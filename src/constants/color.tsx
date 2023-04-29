@@ -10,4 +10,5 @@ export default {
     inActive: "#BCBCBC",
     gray: "#818181",
     darkBlue:"rgb(24,48,117)",
+    modalBackground: "rgba(0,0,0,0.5)",
 };

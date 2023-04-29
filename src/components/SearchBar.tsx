@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import { TouchableOpacity, View, TextInput, StyleSheet } from "react-native";
+import { TouchableOpacity, View, TextInput, StyleSheet, Image } from "react-native";
 
 //Custom Imports
 import color from "../constants/color";
@@ -29,7 +29,7 @@ const SearchBar = forwardRef<Ref, Props>(({
     autoFocus = false,
     onPressRightIcon = () => { },
     clearSearch = false,
-    disabled = false,
+    disabled = true,
 }, ref) => {
     return (
         <View
@@ -47,7 +47,8 @@ const SearchBar = forwardRef<Ref, Props>(({
                         onPress={onPressRightIcon}
                         style={styles.searchIconContainer}
                     >
-                        <SearchIcon />
+                        {/* <SearchIcon /> */}
+                        <Image resizeMode={"contain"} style={styles.locationIcon} source={{ uri: "https://img.icons8.com/ios/50/null/marker--v2.png" }} />
                     </TouchableOpacity>
                 )}
                 <TextInput
@@ -59,7 +60,7 @@ const SearchBar = forwardRef<Ref, Props>(({
                     autoFocus={autoFocus}
                     clearButtonMode="always"
                     ref={ref}
-                    editable = {disabled}
+                    editable={disabled}
                 />
 
                 {shouldShowIcon && query.length > 0 && clearSearch && (
@@ -108,4 +109,8 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         width: 18,
     },
+    locationIcon: {
+        width: 24,
+        height: 24
+    }
 })
