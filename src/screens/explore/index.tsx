@@ -56,7 +56,7 @@ const ExploreJourney = (props: Props) => {
     }
 
     const onSearch = () => {
-        props?.navigation && props.navigation.navigate("SearchResults")
+        props?.navigation && props.navigation.navigate("SearchResults", {source, destination})
     }
 
     return (

@@ -10,3 +10,8 @@ export const updateSearchData = (payload: Array<any> = []) => ({
     type: TRAVEL_TYPES.UPDATE_SEARCH_DATA,
     payload
 });
+
+export const updateLoader = (payload: boolean) => ({
+    type: TRAVEL_TYPES.LOADING,
+    payload
+});

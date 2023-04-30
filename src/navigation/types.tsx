@@ -1,6 +1,7 @@
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
+import { airportType } from '../types/travelSearchDataTypes';
 
 export type HomeStackNavigatorParamList = {
     Home: undefined;
@@ -30,7 +31,10 @@ export type RootNavigatorParamList = {
     ExploreJourney: undefined;
     BottomTabs: undefined;
     Wallet: undefined;
-    SearchResults: undefined;
+    SearchResults: {
+        source: airportType;
+        destination: airportType;
+    };
 };
 
 export type RootNavigationProp = NativeStackNavigationProp<RootNavigatorParamList>;

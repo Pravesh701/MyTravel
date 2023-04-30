@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import React, { memo, useEffect, useCallback, useState } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Image, Pressable, FlatList, ListRenderItem } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Image, Pressable, FlatList, ListRenderItem, ActivityIndicator } from 'react-native'
 
 //Custom Imports
 import color from '../../constants/color';
@@ -9,10 +9,10 @@ import FilterIcon from '../../assets/svgs/FilterIcon';
 import { getSearchApi } from "../../actions/travel.action";
 import FlightDetailsCard from '../../components/FlightDetailsCard';
 import { ITEM, _keyExtractor } from '../searchResults';
-import { searchResultsSelector } from '../../selectors/travel.selector';
 import { travelSearchItemsType } from '../../types/travelSearchDataTypes';
 import FlightDetailModal from '../searchResults/components/FlightDetailModal';
 import { RootNavigationProp, HomeScreenRouteProp } from '../../navigation/types';
+import { searchResultsSelector, loaderSelector } from '../../selectors/travel.selector';
 
 type Props = {
   navigation: RootNavigationProp;
@@ -28,6 +28,7 @@ const _getItemLayout = (data: any, index: number) => ({
 
 const Home = (props: Props) => {
   const dispatch = useDispatch();
+  const loading = useSelector(loaderSelector);
   const searchResults = useSelector(searchResultsSelector);
   const [flightDetails, setFlightDetails] = useState<ITEM | null>(null)
   const [showFilterModal, setShowFilterModal] = useState<boolean>(false);
@@ -67,6 +68,15 @@ const Home = (props: Props) => {
       />
     )
   }, [])
+
+  const renderListEmptyComponent = useCallback(() => {
+    return loading ? (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator color={color.primary} size="large" />
+      </View>
+    ) : null;
+  }, [loading])
+
 
   const ListHeader = memo(() => (
     <React.Fragment>
@@ -108,6 +118,7 @@ const Home = (props: Props) => {
           onEndReachedThreshold={0.5}
           removeClippedSubviews={true}
           ListHeaderComponent={ListHeader}
+          ListEmptyComponent={renderListEmptyComponent}
         />
       </View>
       <FlightDetailModal
@@ -221,5 +232,10 @@ const styles = StyleSheet.create({
     elevation: 4,
     shadowColor: "rgba(0,0,0,0.7)",
     borderWidth: 0,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
   }
 })

@@ -1,19 +1,18 @@
 import React, {memo} from 'react'
-import { useSelector } from 'react-redux'
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
 
 //Custom Imports
 import color from '../../../constants/color'
 import fontFamily from '../../../constants/fontFamily'
-import { searchResultsSelector } from '../../../selectors/travel.selector'
 
-type Props = {}
+type Props = {
+    listCount: number
+}
 
-const ListHeader = (props: Props) => {
-    const searchResults = useSelector(searchResultsSelector);
+const ListHeader = ({listCount = 0}: Props) => {
     return (
         <View style={styles.sectionContainer}>
-            <Text style={styles.sectionTitle}>{`${searchResults.length} Flights found`}</Text>
+            <Text style={styles.sectionTitle}>{`${listCount} Flights found`}</Text>
             <TouchableOpacity style={styles.updateContainer}>
                 <Image resizeMode={"contain"} style={styles.updateIcon} source={{ uri: "https://img.icons8.com/material-two-tone/24/000000/restart--v1.png" }} />
                 <Text style={styles.updateTextStyle}>{"Update"}</Text>

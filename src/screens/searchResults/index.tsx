@@ -1,5 +1,5 @@
-import React, { memo, useCallback, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
+import React, { memo, useCallback, useState, useEffect } from 'react'
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, FlatList, ListRenderItem } from 'react-native'
 
 //Custom Imports
@@ -33,10 +33,31 @@ const _getItemLayout = (data: any, index: number) => ({
 
 const SearchResults = (props: Props) => {
 
+    const { source, destination } = props.route.params || {};
     const dispatch = useDispatch();
     const searchResults = useSelector(searchResultsSelector);
+    const [filteredData, setFilteredData] = useState<Array<travelSearchItemsType>>([])
+
     const [showFlightDetails, setShowFlightDetails] = useState<boolean>(false);
     const [flightDetails, setFlightDetails] = useState<ITEM>(null)
+
+    useEffect(() => {
+        setFilteredData(() => searchResults.filter(filterLogic))
+    }, [source, destination, searchResults])
+
+    console.log('filteredData', filteredData);
+
+
+
+    const filterLogic = (flightItem: travelSearchItemsType) => {
+        const flightSource = flightItem?.displayData?.source?.airport;
+        const flightDestination = flightItem?.displayData?.destination?.airport;
+        if (flightSource?.airportCode === source?.airportCode && flightDestination?.airportCode === destination?.airportCode) {
+            return true
+        } else {
+            return false;
+        }
+    }
 
     const onBackPress = () => {
         props?.navigation && props.navigation.goBack()
@@ -58,6 +79,7 @@ const SearchResults = (props: Props) => {
         setFlightDetails(null)
     }
 
+    const renderTopHeader = useCallback(() => <ListHeader listCount={filteredData.length} />, [filteredData])
 
     return (
         <SafeAreaView style={styles.container}>
@@ -71,12 +93,12 @@ const SearchResults = (props: Props) => {
                 </TouchableOpacity>
             </View>
             <FlatList
-                data={searchResults}
+                data={filteredData}
                 keyExtractor={_keyExtractor}
                 renderItem={cardItems}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
-                ListHeaderComponent={ListHeader}
+                ListHeaderComponent={renderTopHeader}
                 contentContainerStyle={styles.contentContainer}
                 style={styles.listContainer}
                 getItemLayout={_getItemLayout}
@@ -100,7 +122,6 @@ export default memo(SearchResults);
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingHorizontal: 16,
         backgroundColor: color.white,
     },
     listContainer: {

@@ -12,7 +12,7 @@ type Props = {
     showFlightDetails: boolean;
     closeFlightDetailModal: any;
     flightDetails: ITEM;
-    booked: boolean;
+    booked?: boolean;
 }
 
 const FlightDetailModal = ({ showFlightDetails = false, closeFlightDetailModal = () => { }, flightDetails, booked = false }: Props) => {
@@ -47,7 +47,7 @@ const FlightDetailModal = ({ showFlightDetails = false, closeFlightDetailModal =
                             <Text style={styles.rupeeText}>{`₹${fare}`}</Text>
                         </View>
                         <TouchableOpacity onPress={bookFlight} style={styles.proceedButton}>
-                            <Text style={styles.proceedText}>{"Proceed"}</Text>
+                            <Text style={styles.proceedText}>{booked ? "Cancel Ticket" :"Proceed"}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

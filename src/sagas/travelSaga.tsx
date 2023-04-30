@@ -1,9 +1,9 @@
-import { put, call, all, select, takeLatest, debounce } from "redux-saga/effects";
+import { put, call, takeLatest } from "redux-saga/effects";
 
 //Custom Imports
 import { flightSearch } from "../services/api";
 import { TRAVEL_TYPES } from "../reducers/actionTypes";
-import { updateSearchData } from "../actions/travel.action";
+import { updateSearchData, updateLoader } from "../actions/travel.action";
 
 type ACTION_TYPES = {
     payload?: string;
@@ -12,6 +12,7 @@ type ACTION_TYPES = {
 
 function* travelRequest({ payload = "" }: ACTION_TYPES) {
     try {
+        yield put(updateLoader(true));
         const { data } = yield call(flightSearch, payload);
         const { result } = data?.data || {};
         if (result && data?.message === "Success") {
@@ -19,13 +20,15 @@ function* travelRequest({ payload = "" }: ACTION_TYPES) {
         } else {
             yield put(updateSearchData());
         }
+        yield put(updateLoader(false));
     } catch (err) {
         yield put(updateSearchData([]));
+        yield put(updateLoader(false));
     }
 }
 
 function* watchTravelRequest() {
-    yield debounce(1000, TRAVEL_TYPES.GET_SEARCH_DATA, travelRequest)
+    yield takeLatest(TRAVEL_TYPES.GET_SEARCH_DATA, travelRequest)
 }
 
 export {

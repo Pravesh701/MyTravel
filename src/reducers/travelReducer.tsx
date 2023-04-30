@@ -4,11 +4,13 @@ import {
 import { travelSearchItemsType } from "../types/travelSearchDataTypes";
 
 type travelData = {
-    searchResults: Array<travelSearchItemsType>
+    searchResults: Array<travelSearchItemsType>;
+    loader: boolean;
 }
 
 const initState: travelData = {
     searchResults: [],
+    loader:false,
 };
 
 const reducer = (state = initState, action: any) => {
@@ -17,6 +19,12 @@ const reducer = (state = initState, action: any) => {
             return {
                 ...state,
                 searchResults: action.payload,
+            };
+        }
+        case TRAVEL_TYPES.LOADING: {
+            return {
+                ...state,
+                loader: action.payload,
             };
         }
         default:
