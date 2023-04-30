@@ -8,7 +8,7 @@ import fontFamily from '../../constants/fontFamily';
 import FilterIcon from '../../assets/svgs/FilterIcon';
 import { getSearchApi } from "../../actions/travel.action";
 import FlightDetailsCard from '../../components/FlightDetailsCard';
-import { ITEM, _getItemLayout, _keyExtractor } from '../searchResults';
+import { ITEM, _keyExtractor } from '../searchResults';
 import { searchResultsSelector } from '../../selectors/travel.selector';
 import { travelSearchItemsType } from '../../types/travelSearchDataTypes';
 import FlightDetailModal from '../searchResults/components/FlightDetailModal';
@@ -18,6 +18,13 @@ type Props = {
   navigation: RootNavigationProp;
   route: HomeScreenRouteProp;
 }
+
+const ITEM_HEIGHT = 120
+const _getItemLayout = (data: any, index: number) => ({
+  length: ITEM_HEIGHT,
+  offset: ITEM_HEIGHT * index,
+  index,
+});
 
 const Home = (props: Props) => {
   const dispatch = useDispatch();
@@ -204,6 +211,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16
   },
   flightDetailsCard: {
-    marginTop: 15
+    marginTop: 15,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4.65,
+    elevation: 4,
+    shadowColor: "rgba(0,0,0,0.7)",
+    borderWidth: 0
   }
 })

@@ -17,9 +17,8 @@ type Props = {
 
 const FlightDetailsCard = ({ item, containerStyle = {}, onItemPressed = () => { }, index = 0 }: Props) => {
     const { displayData } = item;
-    console.log('flightDetails', displayData);
     const duration = moment.duration(moment(displayData?.destination.arrTime).diff(displayData?.source.depTime));
-    const diffTime = `-- ${duration.hours()}h ${duration.minutes()}m --`
+    const diffTime = `__ ${duration.hours()}h ${duration.minutes()}m __`
     return (
         <Pressable onPress={() => onItemPressed({ item, index })} style={[styles.flightCard, containerStyle]}>
             <View style={styles.flightContainer}>
@@ -122,7 +121,7 @@ const styles = StyleSheet.create({
         color: color.mediumBlack,
         fontFamily: fontFamily.regular,
         fontSize: 14,
-        marginEnd: "22%"
+        marginEnd: 40
     },
     arrTime: {
         color: color.mediumBlack,

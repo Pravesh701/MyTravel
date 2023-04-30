@@ -6,7 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BottomTabs from './Tabs';
 import ExploreJourney from '../screens/explore';
 import { RootNavigatorParamList } from './types';
-import SearchResults from '../screens/searchResults';
+import SearchResults from '../screens/searchResults/index';
 
 const Stack = createNativeStackNavigator<RootNavigatorParamList>();
 

@@ -25,7 +25,7 @@ export type ITEM = {
 
 export const _keyExtractor = (item: travelSearchItemsType, index: number) => item.id;
 export const ITEM_HEIGHT = 78;
-export const _getItemLayout = (data: any, index: number) => ({
+const _getItemLayout = (data: any, index: number) => ({
     length: ITEM_HEIGHT,
     offset: ITEM_HEIGHT * index,
     index,

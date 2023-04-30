@@ -1,12 +1,13 @@
-import React, { memo, useState, useRef, MutableRefObject } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, SafeAreaView } from 'react-native'
+import React, { memo, useState } from 'react'
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, SafeAreaView, Image } from 'react-native'
 
 //Custom Imports
 import color from '../../constants/color';
-import SearchBar from '../../components/SearchBar';
+import SelectCityModal from './SelectCityModal';
 import BackArrow from '../../assets/svgs/BackArrow';
 import fontFamily from '../../constants/fontFamily';
 import CalendarView from '../../components/CalendarView';
+import { airportType } from '../../types/travelSearchDataTypes';
 import { RootNavigationProp, TopRouteProp } from '../../navigation/types';
 
 type Props = {
@@ -16,26 +17,42 @@ type Props = {
 
 const ExploreJourney = (props: Props) => {
 
-    const [source, setSource] = useState<string>("");
-    const [destination, setDestination] = useState<string>("");
-    const [departureTime, setDepartureTime] = useState<string>("Departure");
+    const [source, setSource] = useState<airportType>({
+        cityCode: "DEL",
+        cityName: "Delhi",
+        terminal: "3",
+        airportCode: "DEL",
+        airportName: "Indira Gandhi Airport",
+        countryCode: "IN",
+        countryName: "India"
+    });
+    const [destination, setDestination] = useState<airportType>({
+        cityCode: "BOM",
+        cityName: "Mumbai",
+        terminal: "2",
+        airportCode: "BOM",
+        airportName: "Mumbai",
+        countryCode: "IN",
+        countryName: "India"
+    });
     const [arrival, setArrival] = useState<string>("Arrival");
-
-    const sourceRef = useRef() as MutableRefObject<TextInput>;
-    const destinationRef = useRef() as MutableRefObject<TextInput>;
+    const [departureTime, setDepartureTime] = useState<string>("Departure");
+    const [modalType, setModalType] = useState<"source" | "destination" | "">("")
 
     const onBackPress = () => {
         props?.navigation && props.navigation.goBack()
     }
-    const handleSourceChange = (value: string) => setSource(value);
-    const onPressSourceRightIcon = () => {
-        sourceRef.current.clear();
-        setSource("");
+    const closeModal = () => {
+        setModalType("")
     }
-    const handleDestinationChange = (value: string) => setDestination(value);
-    const onPressDestinationRightIcon = () => {
-        destinationRef.current.clear();
-        setDestination("");
+
+    const onItemPressed = (item: airportType) => {
+        if (modalType === "source") {
+            setSource(item);
+        } else {
+            setDestination(item);
+        }
+        closeModal();
     }
 
     const onSearch = () => {
@@ -55,27 +72,26 @@ const ExploreJourney = (props: Props) => {
                     </TouchableOpacity>
                     <Text style={styles.title}>{"Explore"}</Text>
                 </View>
-                <Text style={styles.searchFlight}>{"Search flights"}</Text>
-                <SearchBar
-                    ref={sourceRef}
-                    placeholder={"Select Destination City or Airport"}
-                    query={source}
-                    handleQueryChange={handleSourceChange}
-                    shouldShowIcon={true}
-                    clearSearch={true}
-                    onPressRightIcon={onPressSourceRightIcon}
-                    customStyles={styles.sourceInputStyle}
-                />
-                <SearchBar
-                    ref={destinationRef}
-                    placeholder={"Select Arrival City or Airport"}
-                    query={destination}
-                    handleQueryChange={handleDestinationChange}
-                    shouldShowIcon={true}
-                    clearSearch={true}
-                    onPressRightIcon={onPressDestinationRightIcon}
-                    customStyles={styles.destinationInputStyle}
-                />
+                <Text style={styles.searchFlight}>{"Select flights"}</Text>
+                <View style={styles.searchContainer}>
+                    <TouchableOpacity onPress={() => setModalType("source")} activeOpacity={0.8} style={styles.sourceContainer}>
+                        <Text style={styles.fromText}>{"From"}</Text>
+                        <Text style={styles.stationCode}>{source.airportCode}</Text>
+                        <Text style={styles.stationName}>{source.cityName}</Text>
+                        <View style={styles.lineStyle} />
+                    </TouchableOpacity>
+                    <Image
+                        resizeMode={"contain"}
+                        source={{ uri: "https://img.icons8.com/windows/32/null/outgoing-data.png" }}
+                        style={styles.outgoingIcon}
+                    />
+                    <TouchableOpacity onPress={() => setModalType("destination")} activeOpacity={0.8} style={[styles.sourceContainer, { alignItems: "flex-end" }]} >
+                        <Text style={styles.fromText}>{"To"}</Text>
+                        <Text style={styles.stationCode}>{destination.airportCode}</Text>
+                        <Text style={styles.stationName}>{destination.cityName}</Text>
+                        <View style={styles.lineStyle} />
+                    </TouchableOpacity>
+                </View>
                 <Text style={styles.tripDate}>{"Trip Date"}</Text>
                 <View style={styles.tripDateContainer}>
                     <CalendarView
@@ -93,6 +109,11 @@ const ExploreJourney = (props: Props) => {
                     </Text>
                 </TouchableOpacity>
             </ScrollView>
+            <SelectCityModal
+                closeModal={closeModal}
+                modalType={modalType}
+                onItemPressed={onItemPressed}
+            />
         </SafeAreaView>
     )
 }
@@ -172,5 +193,42 @@ const styles = StyleSheet.create({
         color: color.white,
         fontFamily: fontFamily.bold,
         fontSize: 16,
+    },
+    searchContainer: {
+        marginTop: 15,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        width: "100%"
+    },
+    sourceContainer: {
+        width: "45%"
+    },
+    fromText: {
+        color: color.lightBlack,
+        fontFamily: fontFamily.light,
+        fontSize: 12,
+    },
+    stationCode: {
+        color: color.mediumBlack,
+        fontFamily: fontFamily.medium,
+        fontSize: 32,
+        marginTop: 4
+    },
+    stationName: {
+        color: color.mediumBlack,
+        fontFamily: fontFamily.light,
+        fontSize: 12,
+        marginTop: 4
+    },
+    lineStyle: {
+        backgroundColor: color.inActive,
+        height: 1,
+        marginTop: 10,
+        width: "100%"
+    },
+    outgoingIcon: {
+        width: 30,
+        height: 20
     }
 })
