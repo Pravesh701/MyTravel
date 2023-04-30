@@ -59,6 +59,10 @@ const ExploreJourney = (props: Props) => {
     const onSearch = () => {
         if (source.airportCode === destination.airportCode) {
             showSnackbar("Destination and departure station can't be same!");
+        } else if (arrival === "Arrival" || departureTime === "Departure") {
+            showSnackbar("Please select trip date.");
+        } else if (arrival === departureTime) {
+            showSnackbar("Arrival and departure date can't be same!");
         } else {
             props?.navigation && props.navigation.navigate("SearchResults", { source, destination })
         }
