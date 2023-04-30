@@ -1,23 +1,31 @@
-import React, { memo, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Image, Pressable } from 'react-native'
+import React, { memo, useEffect, useCallback, useState } from 'react'
+import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Image, Pressable, FlatList, ListRenderItem } from 'react-native'
 
 //Custom Imports
 import color from '../../constants/color';
 import fontFamily from '../../constants/fontFamily';
 import FilterIcon from '../../assets/svgs/FilterIcon';
-import { searchResultsSelector } from '../../selectors/travel.selector';
 import { getSearchApi } from "../../actions/travel.action";
+import FlightDetailsCard from '../../components/FlightDetailsCard';
+import { ITEM, _getItemLayout, _keyExtractor } from '../searchResults';
+import { searchResultsSelector } from '../../selectors/travel.selector';
+import { travelSearchItemsType } from '../../types/travelSearchDataTypes';
+import FlightDetailModal from '../searchResults/components/FlightDetailModal';
 import { RootNavigationProp, HomeScreenRouteProp } from '../../navigation/types';
 
 type Props = {
   navigation: RootNavigationProp;
-  route: HomeScreenRouteProp
+  route: HomeScreenRouteProp;
 }
 
 const Home = (props: Props) => {
   const dispatch = useDispatch();
   const searchResults = useSelector(searchResultsSelector);
+  const [flightDetails, setFlightDetails] = useState<ITEM | null>(null)
+  const [showFilterModal, setShowFilterModal] = useState<boolean>(false);
+  const [showFlightDetails, setShowFlightDetails] = useState<boolean>(false);
+  const [filterData, setFilterData] = useState<Array<travelSearchItemsType>>([])
 
   useEffect(() => {
     getSearchData();
@@ -31,6 +39,46 @@ const Home = (props: Props) => {
     props?.navigation && props.navigation.navigate("ExploreJourney");
   }
 
+  const onItemPressed = ({ item, index }: ITEM) => {
+    setFlightDetails({ item, index });
+    setShowFlightDetails(true);
+  }
+
+  const closeFlightDetailModal = () => {
+    setShowFlightDetails(false);
+    setFlightDetails(null)
+  }
+
+  const cardItems: ListRenderItem<travelSearchItemsType> = useCallback(({ item, index }) => {
+    return (
+      <FlightDetailsCard
+        containerStyle={styles.flightDetailsCard}
+        key={item.id}
+        item={item}
+        onItemPressed={onItemPressed}
+        index={index}
+      />
+    )
+  }, [])
+
+  const ListHeader = memo(() => (
+    <React.Fragment>
+      <Text style={styles.description}>{"Where is your next destination?"}</Text>
+      <View style={styles.mainSearch}>
+        <Pressable style={styles.searchContainer} onPress={onPressSearch}>
+          <View style={styles.searchIconContainer}>
+            <Image resizeMode={"contain"} style={styles.locationIcon} source={{ uri: "https://img.icons8.com/ios/50/null/marker--v2.png" }} />
+          </View>
+          <Text style={styles.searchInput}>{"Your Destination"}</Text>
+        </Pressable>
+        <TouchableOpacity style={styles.filterContainer}>
+          <FilterIcon />
+        </TouchableOpacity>
+      </View>
+      <Text style={styles.upcomingBooking}>{"Upcoming Bookings"}</Text>
+    </React.Fragment>
+  ))
+
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.container}>
@@ -39,19 +87,28 @@ const Home = (props: Props) => {
           <Text style={styles.title}>{"Explore"}</Text>
           <Image resizeMode={"contain"} style={styles.logoStyle} source={{ uri: "https://img.icons8.com/fluency/48/null/lifecycle.png" }} />
         </View>
-        <Text style={styles.description}>{"Where is your next destination?"}</Text>
-        <View style={styles.mainSearch}>
-          <Pressable style={styles.searchContainer} onPress={onPressSearch}>
-            <View style={styles.searchIconContainer}>
-              <Image resizeMode={"contain"} style={styles.locationIcon} source={{ uri: "https://img.icons8.com/ios/50/null/marker--v2.png" }} />
-            </View>
-            <Text style={styles.searchInput}>{"Your Destination"}</Text>
-          </Pressable>
-          <TouchableOpacity style={styles.filterContainer}>
-            <FilterIcon />
-          </TouchableOpacity>
-        </View>
+        <FlatList
+          data={searchResults}
+          keyExtractor={_keyExtractor}
+          renderItem={cardItems}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.contentContainer}
+          style={styles.listContainer}
+          getItemLayout={_getItemLayout}
+          windowSize={150}
+          maxToRenderPerBatch={5}
+          onEndReachedThreshold={0.5}
+          removeClippedSubviews={true}
+          ListHeaderComponent={ListHeader}
+        />
       </View>
+      <FlightDetailModal
+        showFlightDetails={showFlightDetails}
+        closeFlightDetailModal={closeFlightDetailModal}
+        flightDetails={flightDetails}
+        booked={true}
+      />
     </SafeAreaView>
   )
 }
@@ -62,7 +119,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: color.white,
-    paddingHorizontal: 16
   },
   safeAreaView: {
     flex: 1,
@@ -72,7 +128,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    paddingHorizontal: 16
   },
   logoStyle: {
     height: 44,
@@ -88,7 +145,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     color: color.darkBlue,
     fontFamily: fontFamily.bold,
-    fontSize: 26
+    fontSize: 26,
   },
   mainSearch: {
     flexDirection: "row",
@@ -132,4 +189,21 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: fontFamily.regular
   },
+  upcomingBooking: {
+    color: color.mediumBlack,
+    fontFamily: fontFamily.medium,
+    fontSize: 16,
+    marginTop: 20,
+  },
+  listContainer: {
+    flex: 1,
+    marginTop: 10
+  },
+  contentContainer: {
+    flexGrow: 1,
+    paddingHorizontal: 16
+  },
+  flightDetailsCard: {
+    marginTop: 15
+  }
 })

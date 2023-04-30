@@ -23,9 +23,9 @@ export type ITEM = {
     index: number
 }
 
-const _keyExtractor = (item: travelSearchItemsType, index: number) => item.id;
+export const _keyExtractor = (item: travelSearchItemsType, index: number) => item.id;
 export const ITEM_HEIGHT = 78;
-const _getItemLayout = (data: any, index: number) => ({
+export const _getItemLayout = (data: any, index: number) => ({
     length: ITEM_HEIGHT,
     offset: ITEM_HEIGHT * index,
     index,
@@ -36,7 +36,7 @@ const SearchResults = (props: Props) => {
     const dispatch = useDispatch();
     const searchResults = useSelector(searchResultsSelector);
     const [showFlightDetails, setShowFlightDetails] = useState<boolean>(false);
-    const [flightDetails, setFlightDetails] = useState<ITEM | null>(null)
+    const [flightDetails, setFlightDetails] = useState<ITEM>(null)
 
     const onBackPress = () => {
         props?.navigation && props.navigation.goBack()
@@ -89,6 +89,7 @@ const SearchResults = (props: Props) => {
                 showFlightDetails={showFlightDetails}
                 closeFlightDetailModal={closeFlightDetailModal}
                 flightDetails={flightDetails}
+                booked={false}
             />
         </SafeAreaView>
     )

@@ -11,11 +11,12 @@ import FlightDetailsCard from '../../../components/FlightDetailsCard';
 type Props = {
     showFlightDetails: boolean;
     closeFlightDetailModal: any;
-    flightDetails: ITEM | null;
+    flightDetails: ITEM;
+    booked: boolean;
 }
 
-const FlightDetailModal = ({ showFlightDetails = false, closeFlightDetailModal = () => { }, flightDetails }: Props) => {
-    const { id = "", fare = 0, displayData } = flightDetails?.item || {}
+const FlightDetailModal = ({ showFlightDetails = false, closeFlightDetailModal = () => { }, flightDetails, booked = false }: Props) => {
+    const { id = "", fare = 0 } = flightDetails?.item || {};
     const bookFlight = () => {
         closeFlightDetailModal();
     }
@@ -38,7 +39,7 @@ const FlightDetailModal = ({ showFlightDetails = false, closeFlightDetailModal =
                                 height={"15"}
                             />
                         </TouchableOpacity>
-                        <FlightDetailsCard key={id} displayData={displayData} />
+                        <FlightDetailsCard key={id} item={flightDetails?.item} />
                     </ScrollView>
                     <View style={styles.footer}>
                         <View>
