@@ -87,8 +87,8 @@ const ExploreJourney = (props: Props) => {
                         onDayPress={({ dateString }) => setArrival(dateString)}
                     />
                 </View>
-                <TouchableOpacity style = {styles.searchButton} onPress={onSearch}>
-                    <Text style = {styles.searchText}>
+                <TouchableOpacity style={styles.searchButton} onPress={onSearch}>
+                    <Text style={styles.searchText}>
                         {"Search Flight"}
                     </Text>
                 </TouchableOpacity>
@@ -157,18 +157,18 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         marginTop: 10
     },
-    searchButton:{
+    searchButton: {
         height: 44,
         borderRadius: 20,
         backgroundColor: color.primary,
         width: "100%",
         justifyContent: "center",
         alignItems: "center",
-       position: "absolute",
-       bottom: 20,
-       alignSelf: "center",
+        position: "absolute",
+        bottom: 20,
+        alignSelf: "center",
     },
-    searchText:{
+    searchText: {
         color: color.white,
         fontFamily: fontFamily.bold,
         fontSize: 16,

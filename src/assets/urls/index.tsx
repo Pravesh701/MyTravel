@@ -1,0 +1,1 @@
+export const Flight_ICON = "https://img.icons8.com/bubbles/50/null/airplane-take-off.png";

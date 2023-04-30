@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from 'react'
+import React, { memo, useCallback, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, FlatList, ListRenderItem } from 'react-native'
 
@@ -9,6 +9,7 @@ import FlightCard from './components/FlightCard';
 import BackArrow from '../../assets/svgs/BackArrow';
 import fontFamily from '../../constants/fontFamily';
 import FilterIcon from '../../assets/svgs/FilterIcon';
+import FlightDetailModal from './components/FlightDetailModal';
 import { searchResultsSelector } from '../../selectors/travel.selector';
 import { RootNavigationProp, TopRouteProp } from '../../navigation/types';
 import { travelSearchItemsType } from '../../types/travelSearchDataTypes';
@@ -17,23 +18,46 @@ type Props = {
     route: TopRouteProp;
     navigation: RootNavigationProp;
 }
+export type ITEM = {
+    item: travelSearchItemsType;
+    index: number
+}
 
 const _keyExtractor = (item: travelSearchItemsType, index: number) => item.id;
+export const ITEM_HEIGHT = 78;
+const _getItemLayout = (data: any, index: number) => ({
+    length: ITEM_HEIGHT,
+    offset: ITEM_HEIGHT * index,
+    index,
+});
 
 const SearchResults = (props: Props) => {
 
     const dispatch = useDispatch();
     const searchResults = useSelector(searchResultsSelector);
+    const [showFlightDetails, setShowFlightDetails] = useState<boolean>(false);
+    const [flightDetails, setFlightDetails] = useState<ITEM | null>(null)
 
     const onBackPress = () => {
         props?.navigation && props.navigation.goBack()
     }
 
+    const onItemPressed = ({ item, index }: ITEM) => {
+        setFlightDetails({ item, index });
+        setShowFlightDetails(true);
+    }
+
     const cardItems: ListRenderItem<travelSearchItemsType> = useCallback(({ item, index }) => {
         return (
-            <FlightCard item={item} index={index} />
+            <FlightCard onItemPressed={onItemPressed} item={item} index={index} />
         )
     }, [])
+
+    const closeFlightDetailModal = () => {
+        setShowFlightDetails(false);
+        setFlightDetails(null)
+    }
+
 
     return (
         <SafeAreaView style={styles.container}>
@@ -55,6 +79,16 @@ const SearchResults = (props: Props) => {
                 ListHeaderComponent={ListHeader}
                 contentContainerStyle={styles.contentContainer}
                 style={styles.listContainer}
+                getItemLayout={_getItemLayout}
+                windowSize={150}
+                maxToRenderPerBatch={5}
+                onEndReachedThreshold={0.5}
+                removeClippedSubviews={true}
+            />
+            <FlightDetailModal
+                showFlightDetails={showFlightDetails}
+                closeFlightDetailModal={closeFlightDetailModal}
+                flightDetails={flightDetails}
             />
         </SafeAreaView>
     )
@@ -104,8 +138,5 @@ const styles = StyleSheet.create({
         color: color.mediumBlack,
         fontFamily: fontFamily.medium,
         fontSize: 16,
-    },
-    cardContainer: {
-
     },
 })
