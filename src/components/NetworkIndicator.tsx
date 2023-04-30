@@ -1,8 +1,11 @@
-import { addEventListener, fetch } from "@react-native-community/netinfo";
 import React, { useEffect, useState } from "react";
-import { Modal, StatusBar, Text, View, StyleSheet } from "react-native";
-// import ManInSpace from "src/assets/svg/ManInSpace";
-// import Button from "./Button";
+import NetInfo, { addEventListener } from "@react-native-community/netinfo";
+import { Modal, StatusBar, Text, View, StyleSheet, TouchableOpacity } from "react-native";
+
+//Custom Imports
+import color from "../constants/color";
+import fontFamily from "../constants/fontFamily";
+import ManInSpace from "../assets/svgs/ManInSpace";
 
 type Props = {}
 
@@ -21,7 +24,7 @@ const NetworkIndicator = (props: Props) => {
   }, []);
 
   const onPress = () => {
-    fetch().then((state: any) => {
+    NetInfo.fetch().then((state: any) => {
       setIsConnected(state.isInternetReachable);
     });
   };
@@ -31,17 +34,12 @@ const NetworkIndicator = (props: Props) => {
       {!isConnected && <StatusBar backgroundColor="white" />}
       <Modal visible={!isConnected} animationType="fade">
         <View style={styles.container}>
-          {/* <ManInSpace /> */}
-          {/* <Text style={styles.title}>{t(`${PATH}/noInternet`)}</Text>
-          <Text style={styles.subtitle}>{t(`${PATH}/noInternetMsg`)}</Text> */}
-          {/* <Button
-            btnText={t(`${PATH}/tryAgain`)}
-            buttonStyle={styles.btnStyle}
-            buttonWidth={220}
-            borderRadius={10}
-            textStyle={styles.btnTextStyle}
-            onPress={onPress}
-          /> */}
+          <ManInSpace />
+          <Text style={styles.title}>{"Oops! No Internet"}</Text>
+          <Text style={styles.subtitle}>{"Your Internet is not working Please try again."}</Text>
+          <TouchableOpacity style={styles.btnStyle} onPress={onPress}>
+            <Text style={styles.btnTextStyle}>{"Try again"}</Text>
+          </TouchableOpacity>
         </View>
       </Modal>
     </>
@@ -52,26 +50,34 @@ export default NetworkIndicator;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
     flex: 1,
-    justifyContent: "center",
     alignItems: "center",
+    paddingHorizontal: 16,
+    backgroundColor: "white",
+    justifyContent: "center",
   },
   btnStyle: {
-    paddingHorizontal: 36,
-    paddingVertical: 15,
-    height: undefined,
+    height: 44,
+    borderRadius: 10,
+    backgroundColor: color.primary,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 40,
   },
   btnTextStyle: {
     fontSize: 20,
+    color: color.white,
+    fontFamily: fontFamily.bold,
   },
   title: {
     fontSize: 24,
-    fontFamily: "NotoSansDevanagari-Bold",
+    color: color.mediumBlack,
+    fontFamily: fontFamily.bold,
   },
   subtitle: {
-    fontFamily: "NotoSansDevanagari-Regular",
+    color: color.mediumBlack,
+    fontFamily: fontFamily.regular,
     width: "70%",
     textAlign: "center",
   },

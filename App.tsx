@@ -13,9 +13,9 @@ const App = (props: Props) => {
   return (
     <React.Fragment>
       <Provider store={store}>
-        <ErrorBoundary> 
+        <ErrorBoundary>
+          <StatusBar backgroundColor="white" />
           <Main />
-          <StatusBar />
         </ErrorBoundary>
       </Provider>
     </React.Fragment>
