@@ -6,6 +6,7 @@ import color from '../../constants/color';
 import SelectCityModal from './SelectCityModal';
 import BackArrow from '../../assets/svgs/BackArrow';
 import fontFamily from '../../constants/fontFamily';
+import showSnackbar from '../../components/Snackbar';
 import CalendarView from '../../components/CalendarView';
 import { airportType } from '../../types/travelSearchDataTypes';
 import { RootNavigationProp, TopRouteProp } from '../../navigation/types';
@@ -56,7 +57,11 @@ const ExploreJourney = (props: Props) => {
     }
 
     const onSearch = () => {
-        props?.navigation && props.navigation.navigate("SearchResults", {source, destination})
+        if (source.airportCode === destination.airportCode) {
+            showSnackbar("Destination and departure station can't be same!");
+        } else {
+            props?.navigation && props.navigation.navigate("SearchResults", { source, destination })
+        }
     }
 
     return (

@@ -45,10 +45,6 @@ const SearchResults = (props: Props) => {
         setFilteredData(() => searchResults.filter(filterLogic))
     }, [source, destination, searchResults])
 
-    console.log('filteredData', filteredData);
-
-
-
     const filterLogic = (flightItem: travelSearchItemsType) => {
         const flightSource = flightItem?.displayData?.source?.airport;
         const flightDestination = flightItem?.displayData?.destination?.airport;

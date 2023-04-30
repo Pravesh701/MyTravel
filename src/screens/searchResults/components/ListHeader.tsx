@@ -1,19 +1,26 @@
-import React, {memo} from 'react'
+import React, { memo } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
 
 //Custom Imports
 import color from '../../../constants/color'
 import fontFamily from '../../../constants/fontFamily'
+import showSnackbar from '../../../components/Snackbar'
+import { workInProgress } from '../../../constants/strings'
 
 type Props = {
     listCount: number
 }
 
-const ListHeader = ({listCount = 0}: Props) => {
+const ListHeader = ({ listCount = 0 }: Props) => {
+
+    const onUpdate = () => {
+        showSnackbar(workInProgress);
+    }
+
     return (
         <View style={styles.sectionContainer}>
             <Text style={styles.sectionTitle}>{`${listCount} Flights found`}</Text>
-            <TouchableOpacity style={styles.updateContainer}>
+            <TouchableOpacity onPress={onUpdate} style={styles.updateContainer}>
                 <Image resizeMode={"contain"} style={styles.updateIcon} source={{ uri: "https://img.icons8.com/material-two-tone/24/000000/restart--v1.png" }} />
                 <Text style={styles.updateTextStyle}>{"Update"}</Text>
             </TouchableOpacity>
@@ -35,7 +42,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     updateContainer: {
-        flexDirection: "row"
+        flexDirection: "row",
+        alignItems: "center"
     },
     updateIcon: {
         width: 15,
