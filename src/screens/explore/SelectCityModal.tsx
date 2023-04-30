@@ -16,7 +16,7 @@ type Props = {
     onItemPressed: Function;
 }
 
-const ITEM_HEIGHT = 50;
+const ITEM_HEIGHT = 40;
 const _getItemLayout = (data: any, index: number) => ({
     length: ITEM_HEIGHT,
     offset: ITEM_HEIGHT * index,
@@ -30,7 +30,9 @@ const SelectCityModal = ({ modalType = "", closeModal = () => { }, onItemPressed
     const cardItems: ListRenderItem<travelSearchItemsType> = useCallback(({ item, index }) => {
         const cardItem = itemType ? item?.displayData?.source?.airport : item?.displayData?.destination?.airport;
         return (
-            <TouchableOpacity onPress={() => onItemPressed(cardItem)} style={styles.listItemsContainer}>
+            <TouchableOpacity
+                onPress={() => onItemPressed(cardItem)}
+                style={styles.listItemsContainer}>
                 <View>
                     <Text style={styles.cityName}>{cardItem.cityName}</Text>
                     <Text style={styles.stationName}>{cardItem.airportName}</Text>
@@ -125,7 +127,8 @@ const styles = StyleSheet.create({
         marginVertical: 20,
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        height: ITEM_HEIGHT
     },
     cityName: {
 

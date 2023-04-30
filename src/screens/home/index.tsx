@@ -19,10 +19,10 @@ type Props = {
   route: HomeScreenRouteProp;
 }
 
-const ITEM_HEIGHT = 120
+const FLIGHT_ITEM_DETAILS_HEIGHT = 153;
 const _getItemLayout = (data: any, index: number) => ({
-  length: ITEM_HEIGHT,
-  offset: ITEM_HEIGHT * index,
+  length: FLIGHT_ITEM_DETAILS_HEIGHT,
+  offset: FLIGHT_ITEM_DETAILS_HEIGHT * index,
   index,
 });
 
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     color: color.darkBlue,
     fontFamily: fontFamily.bold,
-    fontSize: 26,
+    fontSize: 22,
   },
   mainSearch: {
     flexDirection: "row",
@@ -220,6 +220,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4.65,
     elevation: 4,
     shadowColor: "rgba(0,0,0,0.7)",
-    borderWidth: 0
+    borderWidth: 0,
   }
 })
