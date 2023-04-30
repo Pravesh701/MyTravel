@@ -4,19 +4,11 @@ import type { RouteProp, CompositeNavigationProp } from '@react-navigation/nativ
 
 export type HomeStackNavigatorParamList = {
     Home: undefined;
-    ExploreJourney: undefined;
 };
-
-export type ExploreJourneyRouteProp = RouteProp<
-    HomeStackNavigatorParamList,
-    'ExploreJourney'
->;
-
 export type HomeScreenRouteProp = RouteProp<
     HomeStackNavigatorParamList,
     'Home'
 >;
-
 export type WalletStackNavigatorParamList = {
     Wallet: undefined;
 };
@@ -24,12 +16,10 @@ export type WalletScreenRouteProp = RouteProp<
     WalletStackNavigatorParamList,
     'Wallet'
 >;
-
 export type BottomTabNavigatorParamList = {
     HomeStack: HomeStackNavigatorParamList;
     Wallet: WalletStackNavigatorParamList;
 };
-
 export type HomeScreenNavigationProp = CompositeNavigationProp<
     NativeStackNavigationProp<HomeStackNavigatorParamList, 'Home'>,
     BottomTabNavigationProp<BottomTabNavigatorParamList, 'Wallet'>
@@ -40,4 +30,8 @@ export type RootNavigatorParamList = {
     ExploreJourney: undefined;
     BottomTabs: undefined;
     Wallet: undefined;
+    SearchResults: undefined;
 };
+
+export type RootNavigationProp = NativeStackNavigationProp<RootNavigatorParamList>;
+export type TopRouteProp = RouteProp<RootNavigatorParamList>;

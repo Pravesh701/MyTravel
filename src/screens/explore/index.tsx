@@ -7,11 +7,11 @@ import SearchBar from '../../components/SearchBar';
 import BackArrow from '../../assets/svgs/BackArrow';
 import fontFamily from '../../constants/fontFamily';
 import CalendarView from '../../components/CalendarView';
-import { HomeScreenNavigationProp, ExploreJourneyRouteProp } from '../../navigation/types';
+import { RootNavigationProp, TopRouteProp } from '../../navigation/types';
 
 type Props = {
-    route: ExploreJourneyRouteProp;
-    navigation: HomeScreenNavigationProp;
+    route: TopRouteProp;
+    navigation: RootNavigationProp;
 }
 
 const ExploreJourney = (props: Props) => {
@@ -39,7 +39,7 @@ const ExploreJourney = (props: Props) => {
     }
 
     const onSearch = () => {
-
+        props?.navigation && props.navigation.navigate("SearchResults")
     }
 
     return (

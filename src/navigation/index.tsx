@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BottomTabs from './Tabs';
 import ExploreJourney from '../screens/explore';
 import { RootNavigatorParamList } from './types';
+import SearchResults from '../screens/searchResults';
 
 const Stack = createNativeStackNavigator<RootNavigatorParamList>();
 
@@ -18,6 +19,7 @@ const RootNavigator = () => {
       <Stack.Navigator initialRouteName={"BottomTabs"}>
         <Stack.Screen options={defaultOptions} name="BottomTabs" component={BottomTabs} />
         <Stack.Screen options={defaultOptions} name="ExploreJourney" component={ExploreJourney} />
+        <Stack.Screen options={defaultOptions} name="SearchResults" component={SearchResults} />
       </Stack.Navigator>
     </NavigationContainer>
   );

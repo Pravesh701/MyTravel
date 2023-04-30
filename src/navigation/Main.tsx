@@ -2,8 +2,8 @@ import React, { memo } from 'react'
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 //Custom Imports
-import RootContainer from './navigation';
-import NetworkIndicator from './components/NetworkIndicator';
+import RootContainer from './index';
+import NetworkIndicator from '../components/NetworkIndicator';
 
 type Props = {}
 

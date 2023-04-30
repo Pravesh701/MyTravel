@@ -1,39 +1,26 @@
+import React, { memo, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import React, { memo, useCallback, useState, useEffect, useRef, MutableRefObject } from 'react'
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, Image, Pressable } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Image, Pressable } from 'react-native'
 
 //Custom Imports
 import color from '../../constants/color';
 import fontFamily from '../../constants/fontFamily';
 import FilterIcon from '../../assets/svgs/FilterIcon';
 import { searchResultsSelector } from '../../selectors/travel.selector';
-import { getSearchApi, updateSearchData } from "../../actions/travel.action";
-import { HomeScreenNavigationProp, HomeScreenRouteProp } from '../../navigation/types';
+import { getSearchApi } from "../../actions/travel.action";
+import { RootNavigationProp, HomeScreenRouteProp } from '../../navigation/types';
 
 type Props = {
-  navigation: HomeScreenNavigationProp;
+  navigation: RootNavigationProp;
   route: HomeScreenRouteProp
 }
 
 const Home = (props: Props) => {
   const dispatch = useDispatch();
-  const [search, setSearch] = useState<string>("")
-  const searchRef = useRef() as MutableRefObject<TextInput>;
   const searchResults = useSelector(searchResultsSelector);
 
-
-  const searchFlight = useCallback((searchKey = "") => {
-    setSearch(searchKey)
-    if (searchKey.length > 2) {
-      getSearchData(searchKey);
-    } else if (Array.isArray(searchResults) && searchResults.length !== 0) {
-      dispatch(updateSearchData([]))
-    }
-  }, [])
-
-  const onPressRightIcon = useCallback(() => {
-    searchRef.current.clear();
-    setSearch("");
+  useEffect(() => {
+    getSearchData();
   }, [])
 
   const getSearchData = (searchTerm: string = "") => {
@@ -55,12 +42,9 @@ const Home = (props: Props) => {
         <Text style={styles.description}>{"Where is your next destination?"}</Text>
         <View style={styles.mainSearch}>
           <Pressable style={styles.searchContainer} onPress={onPressSearch}>
-            <TouchableOpacity
-              onPress={onPressRightIcon}
-              style={styles.searchIconContainer}
-            >
+            <View style={styles.searchIconContainer}>
               <Image resizeMode={"contain"} style={styles.locationIcon} source={{ uri: "https://img.icons8.com/ios/50/null/marker--v2.png" }} />
-            </TouchableOpacity>
+            </View>
             <Text style={styles.searchInput}>{"Your Destination"}</Text>
           </Pressable>
           <TouchableOpacity style={styles.filterContainer}>

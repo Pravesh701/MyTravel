@@ -3,8 +3,8 @@ import { StatusBar } from 'react-native'
 import { Provider } from "react-redux";
 
 //Custom Imports
-import Main from "./src/index";
 import store from './src/store';
+import Main from "./src/navigation/Main";
 import ErrorBoundary from './src/screens/errorBoundary'
 
 type Props = {}
