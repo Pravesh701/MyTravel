@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import React, { useCallback, memo } from 'react'
+import React, { useCallback, memo, useState, useEffect } from 'react'
 import { StyleSheet, Text, View, Modal, TouchableOpacity, NativeSyntheticEvent, FlatList, ListRenderItem } from 'react-native'
 
 //Custom Imports
@@ -8,7 +8,7 @@ import { _keyExtractor } from '../searchResults';
 import CrossIcon from '../../assets/svgs/CrossIcon';
 import fontFamily from '../../constants/fontFamily';
 import { searchResultsSelector } from '../../selectors/travel.selector';
-import { travelSearchItemsType } from '../../types/travelSearchDataTypes';
+import { airportType, travelSearchItemsType } from '../../types/travelSearchDataTypes';
 
 type Props = {
     modalType: "source" | "destination" | "";
@@ -26,21 +26,47 @@ const _getItemLayout = (data: any, index: number) => ({
 const SelectCityModal = ({ modalType = "", closeModal = () => { }, onItemPressed = () => { } }: Props) => {
     const itemType = modalType === "source";
     const searchResults = useSelector(searchResultsSelector);
+    const [finalCityData, setFinalCityData] = useState<any>([])
 
-    const cardItems: ListRenderItem<travelSearchItemsType> = useCallback(({ item, index }) => {
-        const cardItem = itemType ? item?.displayData?.source?.airport : item?.displayData?.destination?.airport;
+    useEffect(() => {
+        getUniqueAirports()
+    }, [itemType])
+
+    const getUniqueAirports = () => {
+        const airportSet = new Set();
+        const uniqueAirports: Array<airportType> = [];
+
+        searchResults.forEach((flight: travelSearchItemsType) => {
+            const sourceAirport = flight.displayData.source.airport;
+            const destAirport = flight.displayData.destination.airport;
+
+            if (!airportSet.has(sourceAirport.airportCode)) {
+                airportSet.add(sourceAirport.airportCode);
+                uniqueAirports.push(sourceAirport);
+            }
+
+            if (!airportSet.has(destAirport.airportCode)) {
+                airportSet.add(destAirport.airportCode);
+                uniqueAirports.push(destAirport);
+            }
+        });
+        setFinalCityData(uniqueAirports)
+    }
+
+
+    const cardItems: ListRenderItem<airportType> = useCallback(({ item, index }) => {
         return (
             <TouchableOpacity
-                onPress={() => onItemPressed(cardItem)}
+                onPress={() => onItemPressed(item)}
                 style={styles.listItemsContainer}>
                 <View>
-                    <Text style={styles.cityName}>{cardItem.cityName}</Text>
-                    <Text style={styles.stationName}>{cardItem.airportName}</Text>
+                    <Text style={styles.cityName}>{item.cityName}</Text>
+                    <Text style={styles.stationName}>{item.airportName}</Text>
                 </View>
-                <Text style={styles.airportCode}>{cardItem.airportCode}</Text>
+                <Text style={styles.airportCode}>{item.airportCode}</Text>
             </TouchableOpacity>
         )
-    }, [itemType])
+    }, [itemType, finalCityData, searchResults])
 
     const ItemSeparatorComponent = () => <View style={styles.separator} />;
 
@@ -60,7 +86,7 @@ const SelectCityModal = ({ modalType = "", closeModal = () => { }, onItemPressed
                     </TouchableOpacity>
                     <Text style={styles.modalTypeStyle}>{`Select ${itemType ? "Departure" : "Destination"}`}</Text>
                     <FlatList
-                        data={searchResults}
+                        data={finalCityData}
                         keyExtractor={_keyExtractor}
                         renderItem={cardItems}
                         showsHorizontalScrollIndicator={false}
