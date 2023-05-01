@@ -36,8 +36,7 @@ const ExploreJourney = (props: Props) => {
         countryCode: "IN",
         countryName: "India"
     });
-    const [arrival, setArrival] = useState<string>("Arrival");
-    const [departureTime, setDepartureTime] = useState<string>("Departure");
+    const [departureTime, setDepartureTime] = useState<string>("Depart");
     const [modalType, setModalType] = useState<"source" | "destination" | "">("")
 
     const onBackPress = () => {
@@ -59,10 +58,8 @@ const ExploreJourney = (props: Props) => {
     const onSearch = () => {
         if (source.airportCode === destination.airportCode) {
             showSnackbar("Destination and departure station can't be same!");
-        } else if (arrival === "Arrival" || departureTime === "Departure") {
-            showSnackbar("Please select trip date.");
-        } else if (arrival === departureTime) {
-            showSnackbar("Arrival and departure date can't be same!");
+        } else if (departureTime === "Depart") {
+            showSnackbar("Please select trip depart date.");
         } else {
             props?.navigation && props.navigation.navigate("SearchResults", { source, destination })
         }
@@ -106,10 +103,6 @@ const ExploreJourney = (props: Props) => {
                     <CalendarView
                         placeHolder={departureTime}
                         onDayPress={({ dateString }) => setDepartureTime(dateString)}
-                    />
-                    <CalendarView
-                        placeHolder={arrival}
-                        onDayPress={({ dateString }) => setArrival(dateString)}
                     />
                 </View>
                 <TouchableOpacity style={styles.searchButton} onPress={onSearch}>
