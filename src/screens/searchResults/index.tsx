@@ -10,6 +10,7 @@ import BackArrow from '../../assets/svgs/BackArrow';
 import fontFamily from '../../constants/fontFamily';
 import FilterIcon from '../../assets/svgs/FilterIcon';
 import FlightDetailModal from './components/FlightDetailModal';
+import { airlinesItems } from '../../types/travelSearchDataTypes';
 import FilterFlightModal from '../../components/FilterFlightModal';
 import { searchResultsSelector } from '../../selectors/travel.selector';
 import { RootNavigationProp, TopRouteProp } from '../../navigation/types';
@@ -24,7 +25,7 @@ export type ITEM = {
     index: number
 }
 
-export const _keyExtractor = (item: travelSearchItemsType, index: number) => item.id;
+export const _keyExtractor = (item: travelSearchItemsType, index: number) => `${item.id}${index}`;
 export const ITEM_HEIGHT = 78;
 const _getItemLayout = (data: any, index: number) => ({
     length: ITEM_HEIGHT,
@@ -45,8 +46,8 @@ const SORT_BY_PRICE_ITEMS = [
 
 const SearchResults = (props: Props) => {
 
-    const { source, destination } = props.route.params || {};
     const dispatch = useDispatch();
+    const { source, destination } = props.route.params || {};
     const searchResults = useSelector(searchResultsSelector);
     const [filteredData, setFilteredData] = useState<Array<travelSearchItemsType>>([])
     const [showFilter, setShowFilter] = useState<boolean>(false);
@@ -54,11 +55,35 @@ const SearchResults = (props: Props) => {
     const [flightDetails, setFlightDetails] = useState<ITEM>(null)
     const [checkSortByPrice, setCheckSortByPrice] = useState<boolean>(false);
     const [sortByPriceData, setSortByPriceData] = useState(SORT_BY_PRICE_ITEMS);
-    // const [selectedSortOption, setSelectedSortOption] = useState<string>("")
+    const [filterListByAirlines, setFilterListByAirlines] = useState<Array<airlinesItems>>([]);
+    const [filteredArrayByAirlines, setFilteredArrayByAirlines] = useState<Array<travelSearchItemsType>>([])
 
     useEffect(() => {
-        setFilteredData(() => searchResults.filter(filterLogic))
+        const filterBySourceDestination = searchResults.filter(filterLogic);
+        //Write this line of code for testing of Filters
+        setFilteredData([...filterBySourceDestination, ...searchResults.slice(25)])
+        generateFilterList()
     }, [source, destination, searchResults])
+
+    const generateFilterList = () => {
+        const airlines = searchResults.flatMap((flight: travelSearchItemsType) => flight.displayData.airlines);
+        const uniqueAirlines: Array<airlinesItems> = [];
+
+        airlines.forEach((airline: airlinesItems) => {
+            const isUnique = !uniqueAirlines.some(
+                (uniqueAirline) =>
+                    uniqueAirline.airlineCode === airline.airlineCode &&
+                    uniqueAirline.airlineName === airline.airlineName &&
+                    uniqueAirline.flightNumber === airline.flightNumber
+            );
+
+            if (isUnique) {
+                uniqueAirlines.push(Object.assign(airline, { isChecked: false }));
+            }
+        });
+
+        setFilterListByAirlines(uniqueAirlines);
+    }
 
     const filterLogic = (flightItem: travelSearchItemsType) => {
         const flightSource = flightItem?.displayData?.source?.airport;
@@ -68,36 +93,6 @@ const SearchResults = (props: Props) => {
         } else {
             return false;
         }
-    }
-
-    const onBackPress = () => {
-        props?.navigation && props.navigation.goBack()
-    }
-
-    const onItemPressed = ({ item, index }: ITEM) => {
-        setFlightDetails({ item, index });
-        setShowFlightDetails(true);
-    }
-
-    const cardItems: ListRenderItem<travelSearchItemsType> = useCallback(({ item, index }) => {
-        return (
-            <FlightCard onItemPressed={onItemPressed} item={item} index={index} />
-        )
-    }, [])
-
-    const closeFlightDetailModal = () => {
-        setShowFlightDetails(false);
-        setFlightDetails(null)
-    }
-
-    const handleShowModal = () => {
-        setShowFilter(false);
-        setCheckSortByPrice(false);
-    }
-
-    const onPressSortByPrice = () => {
-        setCheckSortByPrice(true);
-        setShowFilter(true);
     }
 
     const onPressSortByRadio = (id = 0) => {
@@ -114,7 +109,6 @@ const SearchResults = (props: Props) => {
         handleShowModal();
     }
 
-
     const sortLogicBuPrice = (id: number) => {
         let tempFilteredData = [...filteredData]
         tempFilteredData = tempFilteredData.sort((a, b) => {
@@ -125,7 +119,66 @@ const SearchResults = (props: Props) => {
         setFilteredData(tempFilteredData)
     }
 
-    const renderTopHeader = useCallback(() => <ListHeader listCount={filteredData.length} />, [filteredData])
+    const onPressCheckBoxItem = (newVal: boolean, indexNumber: number) => {
+        const tempFilterListByAirlines = [...filterListByAirlines];
+        //@ts-ignore
+        tempFilterListByAirlines[indexNumber]["isChecked"] = newVal;
+        setFilterListByAirlines(tempFilterListByAirlines);
+        finalMethodForFilterByAirlines(false);
+    }
+
+    const finalMethodForFilterByAirlines = (modalCheck = false) => {
+        const myTempArr = filterListByAirlines.filter((item: any) => item?.isChecked);
+        const filteredArray = filteredData.filter(item => {
+            const airlines = item.displayData.airlines;
+            for (let i = 0; i < airlines.length; i++) {
+                const airline = airlines[i];
+                const matchingFlightItem = myTempArr.find(flightItem =>
+                    flightItem.airlineCode === airline.airlineCode &&
+                    flightItem.airlineName === airline.airlineName &&
+                    flightItem.flightNumber === airline.flightNumber
+                );
+                if (matchingFlightItem) {
+                    return true;
+                }
+            }
+            return false;
+        });
+        myTempArr.length !== 0 ? setFilteredArrayByAirlines([...filteredArray]) : setFilteredArrayByAirlines([]);
+        modalCheck && handleShowModal();
+    }
+
+    const onBackPress = () => {
+        props?.navigation && props.navigation.goBack()
+    }
+
+    const onItemPressed = ({ item, index }: ITEM) => {
+        setFlightDetails({ item, index });
+        setShowFlightDetails(true);
+    }
+
+    const closeFlightDetailModal = () => {
+        setShowFlightDetails(false);
+        setFlightDetails(null)
+    }
+
+    const handleShowModal = () => {
+        setShowFilter(false);
+        setCheckSortByPrice(false);
+    }
+
+    const onPressSortByPrice = () => {
+        setCheckSortByPrice(true);
+        setShowFilter(true);
+    }
+
+    const cardItems: ListRenderItem<travelSearchItemsType> = useCallback(({ item, index }) => {
+        return (
+            <FlightCard onItemPressed={onItemPressed} item={item} index={index} />
+        )
+    }, [])
+
+    const renderTopHeader = useCallback(() => <ListHeader listCount={filteredArrayByAirlines.length !== 0 ? filteredArrayByAirlines.length : filteredData.length} />, [filteredData, filteredArrayByAirlines])
 
     return (
         <SafeAreaView style={styles.container}>
@@ -146,7 +199,7 @@ const SearchResults = (props: Props) => {
                 </View>
             </View>
             <FlatList
-                data={filteredData}
+                data={filteredArrayByAirlines.length !== 0 ? filteredArrayByAirlines : filteredData}
                 keyExtractor={_keyExtractor}
                 renderItem={cardItems}
                 showsHorizontalScrollIndicator={false}
@@ -172,6 +225,9 @@ const SearchResults = (props: Props) => {
                 checkSortByPrice={checkSortByPrice}
                 sortData={sortByPriceData}
                 onPressRadio={onPressSortByRadio}
+                filterListByAirlines={filterListByAirlines}
+                onPressCheckBoxItem={onPressCheckBoxItem}
+                finalMethodForFilterByAirlines={finalMethodForFilterByAirlines}
             />
         </SafeAreaView>
     )

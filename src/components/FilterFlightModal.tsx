@@ -1,9 +1,13 @@
 import React from 'react'
+import CheckBox from '@react-native-community/checkbox';
+import { StyleSheet, Text, View, Modal, TouchableOpacity, FlatList } from 'react-native'
+
+//Custom Imports
+import Radio from './Radio';
 import color from '../constants/color';
-import { StyleSheet, Text, View, Modal, TouchableOpacity } from 'react-native'
 import CrossIcon from '../assets/svgs/CrossIcon';
 import fontFamily from '../constants/fontFamily';
-import Radio from './Radio';
+import { airlinesItems } from '../types/travelSearchDataTypes';
 
 type Props = {
     showModal: boolean;
@@ -11,20 +15,61 @@ type Props = {
     checkSortByPrice: boolean;
     onPressRadio: Function;
     sortData: Array<any>;
+    filterListByAirlines: Array<airlinesItems>;
+    onPressCheckBoxItem: Function;
+    finalMethodForFilterByAirlines: Function;
 }
 
-const FilterFlow = () => {
-    return (
-        <View>
+const FilterFlow = ({
+    filterListByAirlines = [],
+    onPressCheckBoxItem = (check: boolean, id: number) => { },
+    finalMethodForFilterByAirlines = () => { }
+}: any) => {
 
-        </View>
+    const renderItems = ({ item, index }: any) => {
+        return (
+            <View style={styles.checkBoxContainer}>
+                <CheckBox
+                    disabled={false}
+                    value={item?.isChecked}
+                    tintColors={{ true: color.primary, false: color.lightBlack }}
+                    tintColor={color.lightBlack}
+                    onValueChange={(newValue) => onPressCheckBoxItem(newValue, index)}
+                />
+                <Text style={[styles.airlineName, {
+                    color: item?.isChecked ? color.primary : color.lightBlack
+                }]}>{item?.airlineName}</Text>
+            </View>
+        )
+    }
+
+    const renderListHeader = () => {
+        return (
+            <Text style={styles.filterByAirLineText}>Filter by Airlines</Text>
+        )
+    }
+
+    return (
+        <React.Fragment>
+            <FlatList
+                data={filterListByAirlines}
+                keyExtractor={(item: airlinesItems) => item.airlineCode}
+                renderItem={renderItems}
+                contentContainerStyle={styles.listContainer}
+                style={styles.checkBoxList}
+                ListHeaderComponent={renderListHeader}
+            />
+            <TouchableOpacity onPress={() => finalMethodForFilterByAirlines(true)} style={styles.bottomButtonContainer}>
+                <Text style={styles.bottomButtonText}>Apply Filter</Text>
+            </TouchableOpacity>
+        </React.Fragment>
     )
 }
 
 const SortByPrice = ({ onPressRadio = () => { }, data = [] }: any) => {
     const renderRadioItems = ({ key, value }: any, index: number) => {
         return (
-            <TouchableOpacity onPress={() => onPressRadio(index)} style={styles.radioContainer}>
+            <TouchableOpacity key={`${value}${index}`} onPress={() => onPressRadio(index)} style={styles.radioContainer}>
                 <Radio
                     active={key}
                 />
@@ -46,10 +91,11 @@ const FilterFlightModal = ({
     handleShowModal = () => { },
     checkSortByPrice = false,
     onPressRadio = () => { },
-    sortData = []
+    sortData = [],
+    filterListByAirlines = [],
+    onPressCheckBoxItem = () => { },
+    finalMethodForFilterByAirlines = () => { },
 }: Props) => {
-    console.log('checkSortByPrice', checkSortByPrice);
-
     return (
         <Modal
             transparent
@@ -70,7 +116,11 @@ const FilterFlightModal = ({
                             data={sortData}
                         />
                         :
-                        <FilterFlow />}
+                        <FilterFlow
+                            filterListByAirlines={filterListByAirlines}
+                            onPressCheckBoxItem={onPressCheckBoxItem}
+                            finalMethodForFilterByAirlines={finalMethodForFilterByAirlines}
+                        />}
                 </View>
             </View>
         </Modal>
@@ -126,5 +176,42 @@ const styles = StyleSheet.create({
         color: color.mediumBlack,
         fontSize: 16,
         marginStart: 12
+    },
+    checkBoxContainer: {
+        marginTop: 16,
+        alignItems: "center",
+        flexDirection: "row"
+    },
+    listContainer: {
+        flexGrow: 1,
+        paddingHorizontal: 16
+    },
+    checkBoxList: {
+        flex: 1
+    },
+    filterByAirLineText: {
+        color: color.lightBlack,
+        fontFamily: fontFamily.medium,
+        fontSize: 16,
+    },
+    airlineName: {
+        color: color.mediumBlack,
+        fontFamily: fontFamily.regular,
+        fontSize: 16,
+        marginStart: 10
+    },
+    bottomButtonContainer: {
+        backgroundColor: color.primary,
+        height: 44,
+        borderRadius: 10,
+        marginBottom: 10,
+        marginHorizontal: 16,
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    bottomButtonText: {
+        color: color.white,
+        fontFamily: fontFamily.bold,
+        fontSize: 16,
     }
 })

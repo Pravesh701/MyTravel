@@ -17,6 +17,7 @@
     "apk": "cd ./android/app/build/outputs/apk/release && open . "
   },
   "dependencies": {
+    "@react-native-community/checkbox": "^0.5.15",
     "@react-native-community/netinfo": "^9.3.9",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/drawer": "^6.6.2",
