@@ -32,6 +32,17 @@ const _getItemLayout = (data: any, index: number) => ({
     index,
 });
 
+const SORT_BY_PRICE_ITEMS = [
+    {
+        key: false,
+        value: "Low to high",
+    },
+    {
+        key: false,
+        value: "High to low",
+    }
+]
+
 const SearchResults = (props: Props) => {
 
     const { source, destination } = props.route.params || {};
@@ -41,7 +52,9 @@ const SearchResults = (props: Props) => {
     const [showFilter, setShowFilter] = useState<boolean>(false);
     const [showFlightDetails, setShowFlightDetails] = useState<boolean>(false);
     const [flightDetails, setFlightDetails] = useState<ITEM>(null)
-    const [checkSortByPrice, setCheckSortByPrice] = useState<boolean>(false)
+    const [checkSortByPrice, setCheckSortByPrice] = useState<boolean>(false);
+    const [sortByPriceData, setSortByPriceData] = useState(SORT_BY_PRICE_ITEMS);
+    // const [selectedSortOption, setSelectedSortOption] = useState<string>("")
 
     useEffect(() => {
         setFilteredData(() => searchResults.filter(filterLogic))
@@ -79,11 +92,37 @@ const SearchResults = (props: Props) => {
 
     const handleShowModal = () => {
         setShowFilter(false);
+        setCheckSortByPrice(false);
     }
 
-    const onPressSortByPrice=()=>{
+    const onPressSortByPrice = () => {
         setCheckSortByPrice(true);
         setShowFilter(true);
+    }
+
+    const onPressSortByRadio = (id = 0) => {
+        const tempData = [...sortByPriceData];
+        for (let index = 0; index < tempData.length; index++) {
+            if (id === index) {
+                tempData[index].key = true;
+            } else {
+                tempData[index].key = false;
+            }
+        }
+        sortLogicBuPrice(id)
+        setSortByPriceData(tempData);
+        handleShowModal();
+    }
+
+
+    const sortLogicBuPrice = (id: number) => {
+        let tempFilteredData = [...filteredData]
+        tempFilteredData = tempFilteredData.sort((a, b) => {
+            if (id === 0)
+                return a.fare - b.fare
+            else return b.fare - a.fare
+        });
+        setFilteredData(tempFilteredData)
     }
 
     const renderTopHeader = useCallback(() => <ListHeader listCount={filteredData.length} />, [filteredData])
@@ -101,7 +140,7 @@ const SearchResults = (props: Props) => {
                     <TouchableOpacity onPress={onPressSortByPrice} style={styles.sortByContainer}>
                         <Text style={styles.sortByPrice}>{"Price"}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>setShowFilter(true)} style={styles.filterContainer}>
+                    <TouchableOpacity onPress={() => setShowFilter(true)} style={styles.filterContainer}>
                         <FilterIcon />
                     </TouchableOpacity>
                 </View>
@@ -130,7 +169,9 @@ const SearchResults = (props: Props) => {
             <FilterFlightModal
                 handleShowModal={handleShowModal}
                 showModal={showFilter}
-                checkSortByPrice = {checkSortByPrice}
+                checkSortByPrice={checkSortByPrice}
+                sortData={sortByPriceData}
+                onPressRadio={onPressSortByRadio}
             />
         </SafeAreaView>
     )

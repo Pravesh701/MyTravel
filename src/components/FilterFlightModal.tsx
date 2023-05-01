@@ -3,11 +3,14 @@ import color from '../constants/color';
 import { StyleSheet, Text, View, Modal, TouchableOpacity } from 'react-native'
 import CrossIcon from '../assets/svgs/CrossIcon';
 import fontFamily from '../constants/fontFamily';
+import Radio from './Radio';
 
 type Props = {
     showModal: boolean;
     handleShowModal: () => void;
     checkSortByPrice: boolean;
+    onPressRadio: Function;
+    sortData: Array<any>;
 }
 
 const FilterFlow = () => {
@@ -18,12 +21,22 @@ const FilterFlow = () => {
     )
 }
 
-const SortByPrice = () => {
+const SortByPrice = ({ onPressRadio = () => { }, data = [] }: any) => {
+    const renderRadioItems = ({ key, value }: any, index: number) => {
+        return (
+            <TouchableOpacity onPress={() => onPressRadio(index)} style={styles.radioContainer}>
+                <Radio
+                    active={key}
+                />
+                <Text style={styles.radioText}>{value}</Text>
+            </TouchableOpacity>
+        )
+    }
     return (
-        <View style = {styles.sortByPriceContainer}>
-            <Text style = {styles.sortByPrice}>SORT BY PRICE</Text>
-            <View style = {styles.lineStyle} />
-            
+        <View style={styles.sortByPriceContainer}>
+            <Text style={styles.sortByPrice}>SORT BY PRICE</Text>
+            <View style={styles.lineStyle} />
+            {data.map(renderRadioItems)}
         </View>
     )
 }
@@ -32,9 +45,11 @@ const FilterFlightModal = ({
     showModal = false,
     handleShowModal = () => { },
     checkSortByPrice = false,
+    onPressRadio = () => { },
+    sortData = []
 }: Props) => {
     console.log('checkSortByPrice', checkSortByPrice);
-    
+
     return (
         <Modal
             transparent
@@ -49,7 +64,13 @@ const FilterFlightModal = ({
                             height={"15"}
                         />
                     </TouchableOpacity>
-                    {checkSortByPrice ? <SortByPrice /> : <FilterFlow />}
+                    {checkSortByPrice ?
+                        <SortByPrice
+                            onPressRadio={onPressRadio}
+                            data={sortData}
+                        />
+                        :
+                        <FilterFlow />}
                 </View>
             </View>
         </Modal>
@@ -80,18 +101,30 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center"
     },
-    sortByPrice:{
+    sortByPrice: {
         color: color.lightBlack,
         fontFamily: fontFamily.medium,
         fontSize: 16,
         marginHorizontal: 16
     },
-    sortByPriceContainer:{
+    sortByPriceContainer: {
         // paddingHorizontal: 16
     },
-    lineStyle:{
+    lineStyle: {
         height: 1,
         backgroundColor: color.silver,
         marginTop: 10
+    },
+    radioContainer: {
+        flexDirection: "row",
+        marginTop: 10,
+        marginHorizontal: 16,
+        alignItems: "center"
+    },
+    radioText: {
+        fontFamily: fontFamily.regular,
+        color: color.mediumBlack,
+        fontSize: 16,
+        marginStart: 12
     }
 })
