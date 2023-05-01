@@ -10,6 +10,7 @@ import BackArrow from '../../assets/svgs/BackArrow';
 import fontFamily from '../../constants/fontFamily';
 import FilterIcon from '../../assets/svgs/FilterIcon';
 import FlightDetailModal from './components/FlightDetailModal';
+import FilterFlightModal from '../../components/FilterFlightModal';
 import { searchResultsSelector } from '../../selectors/travel.selector';
 import { RootNavigationProp, TopRouteProp } from '../../navigation/types';
 import { travelSearchItemsType } from '../../types/travelSearchDataTypes';
@@ -37,9 +38,10 @@ const SearchResults = (props: Props) => {
     const dispatch = useDispatch();
     const searchResults = useSelector(searchResultsSelector);
     const [filteredData, setFilteredData] = useState<Array<travelSearchItemsType>>([])
-
+    const [showFilter, setShowFilter] = useState<boolean>(false);
     const [showFlightDetails, setShowFlightDetails] = useState<boolean>(false);
     const [flightDetails, setFlightDetails] = useState<ITEM>(null)
+    const [checkSortByPrice, setCheckSortByPrice] = useState<boolean>(false)
 
     useEffect(() => {
         setFilteredData(() => searchResults.filter(filterLogic))
@@ -75,18 +77,34 @@ const SearchResults = (props: Props) => {
         setFlightDetails(null)
     }
 
+    const handleShowModal = () => {
+        setShowFilter(false);
+    }
+
+    const onPressSortByPrice=()=>{
+        setCheckSortByPrice(true);
+        setShowFilter(true);
+    }
+
     const renderTopHeader = useCallback(() => <ListHeader listCount={filteredData.length} />, [filteredData])
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.headerContainer}>
-                <TouchableOpacity onPress={onBackPress} style={styles.backButtonContainer}>
-                    <BackArrow fill={color.mediumBlack} />
-                </TouchableOpacity>
-                <Text style={styles.title}>{"Explore"}</Text>
-                <TouchableOpacity style={styles.filterContainer}>
-                    <FilterIcon />
-                </TouchableOpacity>
+                <View style={styles.titleContainer}>
+                    <TouchableOpacity onPress={onBackPress} style={styles.backButtonContainer}>
+                        <BackArrow fill={color.mediumBlack} />
+                    </TouchableOpacity>
+                    <Text style={styles.title}>{`${source?.cityName}  ->  ${destination?.cityName}`}</Text>
+                </View>
+                <View style={styles.sortByPriceContainer}>
+                    <TouchableOpacity onPress={onPressSortByPrice} style={styles.sortByContainer}>
+                        <Text style={styles.sortByPrice}>{"Price"}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={()=>setShowFilter(true)} style={styles.filterContainer}>
+                        <FilterIcon />
+                    </TouchableOpacity>
+                </View>
             </View>
             <FlatList
                 data={filteredData}
@@ -109,6 +127,11 @@ const SearchResults = (props: Props) => {
                 flightDetails={flightDetails}
                 booked={false}
             />
+            <FilterFlightModal
+                handleShowModal={handleShowModal}
+                showModal={showFilter}
+                checkSortByPrice = {checkSortByPrice}
+            />
         </SafeAreaView>
     )
 }
@@ -119,6 +142,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: color.white,
+    },
+    titleContainer: {
+        flexDirection: "row",
+        alignItems: "center"
     },
     listContainer: {
         flex: 1,
@@ -150,11 +177,33 @@ const styles = StyleSheet.create({
         backgroundColor: color.primary,
         justifyContent: "center",
         alignItems: "center",
-        marginStart: 23
+        marginStart: 10
     },
     title: {
         color: color.mediumBlack,
         fontFamily: fontFamily.medium,
         fontSize: 16,
+        marginStart: 15
     },
+    footer: {
+        height: 100,
+        backgroundColor: color.modalBackground,
+    },
+    sortByPriceContainer: {
+        flexDirection: "row",
+        alignItems: "center"
+    },
+    sortByContainer: {
+        paddingHorizontal: 10,
+        paddingVertical: 8,
+        backgroundColor: color.primary,
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 20,
+    },
+    sortByPrice: {
+        color: color.white,
+        fontFamily: fontFamily.medium,
+        fontSize: 16,
+    }
 })
