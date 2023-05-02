@@ -1,11 +1,13 @@
 import React from 'react'
-import { StatusBar } from 'react-native'
 import { Provider } from "react-redux";
+import { StatusBar, LogBox } from 'react-native'
 
 //Custom Imports
 import store from './src/store';
 import Main from "./src/navigation/Main";
 import ErrorBoundary from './src/screens/ErrorBoundary/index';
+
+LogBox.ignoreAllLogs();
 
 type Props = {}
 
