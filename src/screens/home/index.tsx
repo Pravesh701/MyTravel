@@ -5,10 +5,10 @@ import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Image, Pressabl
 //Custom Imports
 import color from '../../constants/color';
 import fontFamily from '../../constants/fontFamily';
-import FilterIcon from '../../assets/svgs/FilterIcon';
+import { ITEM, _keyExtractor } from '../searchResults';
+import AddNoteModal from '../../components/AddNoteModal';
 import { getSearchApi } from "../../actions/travel.action";
 import FlightDetailsCard from '../../components/FlightDetailsCard';
-import { ITEM, _keyExtractor } from '../searchResults';
 import { travelSearchItemsType } from '../../types/travelSearchDataTypes';
 import FlightDetailModal from '../searchResults/components/FlightDetailModal';
 import { RootNavigationProp, HomeScreenRouteProp } from '../../navigation/types';
@@ -31,9 +31,8 @@ const Home = (props: Props) => {
   const loading = useSelector(loaderSelector);
   const searchResults = useSelector(searchResultsSelector);
   const [flightDetails, setFlightDetails] = useState<ITEM | null>(null)
-  const [showFilterModal, setShowFilterModal] = useState<boolean>(false);
+  const [showAddNoteModal, setShowAddNoteModal] = useState<boolean>(false);
   const [showFlightDetails, setShowFlightDetails] = useState<boolean>(false);
-  const [filterData, setFilterData] = useState<Array<travelSearchItemsType>>([])
 
   useEffect(() => {
     getSearchData();
@@ -88,9 +87,6 @@ const Home = (props: Props) => {
           </View>
           <Text style={styles.searchInput}>{"Your Destination"}</Text>
         </Pressable>
-        <TouchableOpacity style={styles.filterContainer}>
-          <FilterIcon />
-        </TouchableOpacity>
       </View>
       <Text style={styles.upcomingBooking}>{"Upcoming Bookings"}</Text>
     </React.Fragment>
@@ -121,11 +117,18 @@ const Home = (props: Props) => {
           ListEmptyComponent={renderListEmptyComponent}
         />
       </View>
+      <TouchableOpacity onPress={() => setShowAddNoteModal(true)} style={styles.filterContainer}>
+        <Image style={styles.fab} source={{ uri: "https://img.icons8.com/dusk/64/null/add-property--v2.png" }} />
+      </TouchableOpacity>
       <FlightDetailModal
         showFlightDetails={showFlightDetails}
         closeFlightDetailModal={closeFlightDetailModal}
         flightDetails={flightDetails}
         booked={true}
+      />
+      <AddNoteModal
+        showAddNoteModal={showAddNoteModal}
+        setShowAddNoteModal={setShowAddNoteModal}
       />
     </SafeAreaView>
   )
@@ -179,15 +182,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
   },
-  filterContainer: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: color.primary,
-    justifyContent: "center",
-    alignItems: "center",
-    marginStart: 23
-  },
   locationIcon: {
     width: 24,
     height: 24
@@ -237,5 +231,21 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center"
-  }
+  },
+  fab: {
+    width: 30,
+    height: 30
+  },
+  filterContainer: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: color.primary,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    end: 16,
+    bottom: 12,
+    zIndex: 100
+  },
 })

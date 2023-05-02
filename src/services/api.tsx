@@ -37,3 +37,9 @@ export const createTrip = (payload = {}) =>
 
 export const tripNotCreated = (payload = {}) =>
   api.post("c5e485331b0467f4e0a9", payload);
+
+export const addNotesApi = async () => {
+  return new Promise((resolve, reject) => {
+    resolve({ message: "Successfully Notes Added" })
+  })
+}  
