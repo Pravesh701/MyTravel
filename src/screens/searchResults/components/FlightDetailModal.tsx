@@ -6,6 +6,9 @@ import { ITEM } from "../index";
 import color from '../../../constants/color';
 import CrossIcon from '../../../assets/svgs/CrossIcon'
 import fontFamily from '../../../constants/fontFamily';
+import showSnackbar from '../../../components/Snackbar';
+import { RootNavigationProp } from '../../../navigation/types';
+import { createTrip, tripNotCreated } from '../../../services/api';
 import FlightDetailsCard from '../../../components/FlightDetailsCard';
 
 type Props = {
@@ -13,12 +16,31 @@ type Props = {
     closeFlightDetailModal: any;
     flightDetails: ITEM;
     booked?: boolean;
+    navigation?: RootNavigationProp
 }
 
-const FlightDetailModal = ({ showFlightDetails = false, closeFlightDetailModal = () => { }, flightDetails, booked = false }: Props) => {
+const FlightDetailModal = ({ showFlightDetails = false, closeFlightDetailModal = () => { }, flightDetails, booked = false, navigation }: Props) => {
     const { id = "", fare = 0 } = flightDetails?.item || {};
-    const bookFlight = () => {
-        closeFlightDetailModal();
+    const bookFlight = async () => {
+        try {
+            if (booked) {
+                const { data } = await tripNotCreated({ id })
+                if (!!data) {
+                    closeFlightDetailModal();
+                    showSnackbar("Trip cancelled successfully");
+                }
+            } else {
+                const { data } = await createTrip({ id })
+                if (!!data) {
+                    closeFlightDetailModal();
+                    showSnackbar("Trip created successfully");
+                    navigation && navigation?.navigate("BottomTabs");
+                }
+            }
+        } catch (error) {
+            closeFlightDetailModal();
+            showSnackbar("Trip cannot be created successfully");
+        }
     }
 
     return (
@@ -47,7 +69,7 @@ const FlightDetailModal = ({ showFlightDetails = false, closeFlightDetailModal =
                             <Text style={styles.rupeeText}>{`₹${fare}`}</Text>
                         </View>
                         <TouchableOpacity onPress={bookFlight} style={styles.proceedButton}>
-                            <Text style={styles.proceedText}>{booked ? "Cancel Ticket" :"Proceed"}</Text>
+                            <Text style={styles.proceedText}>{booked ? "Cancel Ticket" : "Proceed"}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

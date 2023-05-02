@@ -2,10 +2,10 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import React, { memo } from 'react'
 
 //Custom Imports
-import { ITEM_HEIGHT } from '../index';
 import color from '../../../constants/color';
 import { Flight_ICON } from '../../../assets/urls';
 import fontFamily from '../../../constants/fontFamily';
+import { ITEM_HEIGHT } from '../../../screens/searchResults/index';
 import { travelSearchItemsType } from '../../../types/travelSearchDataTypes';
 
 type Props = {

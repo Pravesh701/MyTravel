@@ -5,7 +5,7 @@ import { Provider } from "react-redux";
 //Custom Imports
 import store from './src/store';
 import Main from "./src/navigation/Main";
-import ErrorBoundary from './src/screens/ErrorBoundary';
+import ErrorBoundary from './src/screens/ErrorBoundary/index';
 
 type Props = {}
 

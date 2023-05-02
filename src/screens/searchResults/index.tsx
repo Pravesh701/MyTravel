@@ -218,6 +218,7 @@ const SearchResults = (props: Props) => {
                 closeFlightDetailModal={closeFlightDetailModal}
                 flightDetails={flightDetails}
                 booked={false}
+                navigation = {props.navigation}
             />
             <FilterFlightModal
                 handleShowModal={handleShowModal}
