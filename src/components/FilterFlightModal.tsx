@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     innerContainer: {
         flexDirection: "column",
         backgroundColor: color.white,
-        height: "75%",
+        height: "50%",
         borderTopStartRadius: 10,
         borderTopEndRadius: 10,
     },
