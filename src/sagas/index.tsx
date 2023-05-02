@@ -1,4 +1,4 @@
-import { all, call, fork } from "redux-saga/effects";
+import { all, fork } from "redux-saga/effects";
 
 import { watchTravelRequest } from "./travelSaga";
 

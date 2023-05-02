@@ -60,7 +60,7 @@ const SearchResults = (props: Props) => {
 
     useEffect(() => {
         const filterBySourceDestination = searchResults.filter(filterLogic);
-        //Write this line of code for testing of Filters
+        //Written this line of code for testing of Filters
         setFilteredData([...filterBySourceDestination, ...searchResults.slice(25)])
         generateFilterList()
     }, [source, destination, searchResults])
