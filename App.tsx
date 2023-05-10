@@ -13,12 +13,14 @@ type Props = {}
 
 const App = (props: Props) => {
   return (
-    <Provider store={store}>
-      <ErrorBoundary>
-        <StatusBar backgroundColor="white" />
-        <Main />
-      </ErrorBoundary>
-    </Provider>
+    <React.Fragment>
+      <Provider store={store}>
+        <ErrorBoundary>
+          <StatusBar backgroundColor="white" />
+          <Main />
+        </ErrorBoundary>
+      </Provider>
+    </React.Fragment>
   )
 }
 
