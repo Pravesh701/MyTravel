@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import React, { Component, ErrorInfo, ReactNode } from "react";
 
 interface Props {
@@ -24,10 +24,22 @@ class ErrorBoundary extends Component<Props, State> {
 
   public render() {
     if (this.state.hasError) {
-      return <View>Sorry.. there was an error</View>;
+      return (
+        <View style={styles.container}>
+          <Text>Sorry.. there was an error</Text>
+        </View>
+      )
     }
     return this.props.children;
   }
 }
 
 export default ErrorBoundary;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  }
+})
