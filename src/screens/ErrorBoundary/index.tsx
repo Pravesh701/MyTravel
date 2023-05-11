@@ -1,5 +1,9 @@
-import { View } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import React, { Component, ErrorInfo, ReactNode } from "react";
+
+//Custom Imports
+import color from "../../constants/color";
+import fontFamily from "../../constants/fontFamily";
 
 interface Props {
   children?: ReactNode;
@@ -24,10 +28,28 @@ class ErrorBoundary extends Component<Props, State> {
 
   public render() {
     if (this.state.hasError) {
-      return <View>Sorry.. there was an error</View>;
+      return (
+        <View style={styles.container}>
+          <Text style={styles.sorryText}>{"Sorry.. there was an error"}</Text>
+        </View>
+      );
     }
     return this.props.children;
   }
 }
 
 export default ErrorBoundary;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: color.white
+  },
+  sorryText: {
+    color: color.mediumBlack,
+    fontFamily: fontFamily.medium,
+    fontSize: 16
+  }
+})

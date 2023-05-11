@@ -104,12 +104,12 @@ const SearchResults = (props: Props) => {
                 tempData[index].key = false;
             }
         }
-        sortLogicBuPrice(id)
+        sortLogicByPrice(id)
         setSortByPriceData(tempData);
         handleShowModal();
     }
 
-    const sortLogicBuPrice = (id: number) => {
+    const sortLogicByPrice = (id: number) => {
         let tempFilteredData = [...filteredData]
         tempFilteredData = tempFilteredData.sort((a, b) => {
             if (id === 0)
