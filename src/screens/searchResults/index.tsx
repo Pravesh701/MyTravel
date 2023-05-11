@@ -52,6 +52,7 @@ const SearchResults = (props: Props) => {
     const [filteredData, setFilteredData] = useState<Array<travelSearchItemsType>>([])
     const [showFilter, setShowFilter] = useState<boolean>(false);
     const [showFlightDetails, setShowFlightDetails] = useState<boolean>(false);
+    //@ts-ignore
     const [flightDetails, setFlightDetails] = useState<ITEM>(null)
     const [checkSortByPrice, setCheckSortByPrice] = useState<boolean>(false);
     const [sortByPriceData, setSortByPriceData] = useState(SORT_BY_PRICE_ITEMS);
@@ -159,6 +160,7 @@ const SearchResults = (props: Props) => {
 
     const closeFlightDetailModal = () => {
         setShowFlightDetails(false);
+         //@ts-ignore
         setFlightDetails(null)
     }
 
