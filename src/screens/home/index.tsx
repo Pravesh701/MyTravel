@@ -226,6 +226,7 @@ const styles = StyleSheet.create({
     elevation: 4,
     shadowColor: "rgba(0,0,0,0.7)",
     borderWidth: 0,
+    height: FLIGHT_ITEM_DETAILS_HEIGHT
   },
   loaderContainer: {
     flex: 1,
