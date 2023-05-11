@@ -88,6 +88,7 @@ const SelectCityModal = ({ modalType = "", closeModal = () => { }, onItemPressed
                     <FlatList
                         data={finalCityData}
                         keyExtractor={_keyExtractor}
+                        //@ts-ignore
                         renderItem={cardItems}
                         showsHorizontalScrollIndicator={false}
                         showsVerticalScrollIndicator={false}

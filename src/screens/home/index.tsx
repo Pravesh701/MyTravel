@@ -123,6 +123,7 @@ const Home = (props: Props) => {
       <FlightDetailModal
         showFlightDetails={showFlightDetails}
         closeFlightDetailModal={closeFlightDetailModal}
+        //@ts-ignore
         flightDetails={flightDetails}
         booked={true}
       />
