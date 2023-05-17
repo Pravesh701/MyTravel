@@ -14,7 +14,10 @@
     "pods": "cd ./ios && pod install",
     "tcp": "adb reverse tcp:8081 tcp:8081",
     "build_android": "cd ./android && ./gradlew app:assembleRelease",
-    "apk": "cd ./android/app/build/outputs/apk/release && open . "
+    "apk": "cd ./android/app/build/outputs/apk/release && open . ",
+    "android_menu": "adb shell input keyevent 82",
+    "release_android": "react-native run-android --mode release",
+    "release_ios": "react-native run-ios --mode Release"
   },
   "dependencies": {
     "@react-native-community/checkbox": "^0.5.15",
