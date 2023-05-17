@@ -73,9 +73,7 @@ const SearchResults = (props: Props) => {
         airlines.forEach((airline: airlinesItems) => {
             const isUnique = !uniqueAirlines.some(
                 (uniqueAirline) =>
-                    uniqueAirline.airlineCode === airline.airlineCode &&
-                    uniqueAirline.airlineName === airline.airlineName &&
-                    uniqueAirline.flightNumber === airline.flightNumber
+                    uniqueAirline.airlineCode === airline.airlineCode
             );
 
             if (isUnique) {

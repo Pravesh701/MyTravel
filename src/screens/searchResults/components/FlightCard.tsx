@@ -51,6 +51,8 @@ const styles = StyleSheet.create({
     shadowColor: "rgba(0,0,0,0.7)",
     backgroundColor: color.white,
     flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   flightIcon: {
     width: 30,
@@ -58,7 +60,7 @@ const styles = StyleSheet.create({
     borderRadius: 15
   },
   flightIconContainer: {
-
+    flex: 0.2
   },
   flightName: {
     color: color.mediumBlack,
@@ -66,7 +68,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   airlineTimeContainer: {
-    marginStart: 20,
+    flex: 0.6,
+    alignItems: "center",
+    justifyContent: "center"
   },
   airlineTime: {
     color: color.mediumBlack,
@@ -83,8 +87,6 @@ const styles = StyleSheet.create({
     color: color.mediumBlack,
     fontFamily: fontFamily.medium,
     fontSize: 18,
-    position: "absolute",
-    top: 12,
-    end: 12,
+    flex: 0.2,
   }
 })
